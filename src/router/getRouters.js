@@ -3,6 +3,7 @@ import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import axios from 'axios'
 const _import = require('../router/_import_' + process.env.NODE_ENV)//获取组件的方法
+console.log(process.env.NODE_ENV)
 import Layout from '@/components/Layout'
 import settings from '@/settings'
 let getRouter
@@ -14,6 +15,7 @@ if(settings.useAjaxRouter){
       if (!getObjArr('router')) {
         axios.get('https://www.easy-mock.com/mock/5d2bef4b2ca43008a83cba68/example/getRouter').then(res => {
           getRouter = res.data.data.router//后台拿到路由
+      
           saveObjArr('router', getRouter) //存储路由到localStorage
           routerGo(to, next)//执行路由跳转方法
           NProgress.done()
@@ -48,6 +50,7 @@ function getObjArr(name) { //localStorage 获取数组对象的方法
 
 }
 function routerGo(to, next) {
+
   getRouter = filterAsyncRouter(getRouter) //过滤路由
   router.addRoutes(getRouter) //动态添加路由
   router.options.routes = router.options.routes.concat(getRouter)
@@ -55,12 +58,16 @@ function routerGo(to, next) {
   next({ ...to, replace: true })
 }
 function filterAsyncRouter(asyncRouterMap) { //遍历后台传来的路由字符串，转换为组件对象
+
   const accessedRouters = asyncRouterMap.filter(route => {
+  
     if (route.component) {
       if (route.component === 'Layout') {//Layout组件特殊处理
         route.component = Layout
       } else { 
+     
         route.component = _import(route.component)
+    
       }
     }
     if (route.children && route.children.length) {
@@ -68,6 +75,5 @@ function filterAsyncRouter(asyncRouterMap) { //遍历后台传来的路由字符
     }
     return true
   })
-
   return accessedRouters
 }
