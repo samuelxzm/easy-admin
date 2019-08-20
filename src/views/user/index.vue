@@ -38,6 +38,9 @@
       layout="total, sizes, prev, pager, next, jumper"
       :total="400"
     ></el-pagination>
+    <el-dialog title="收货地址" :visible.sync="dialogTableVisible">
+<router-view></router-view>
+</el-dialog>
   </el-card>
 </template>
 <style>
@@ -64,6 +67,7 @@ export default {
   },
   data() {
     return {
+        dialogTableVisible:true,
       formInline: {
         user: "",
         region: ""
