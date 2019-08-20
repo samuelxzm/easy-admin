@@ -24,11 +24,38 @@
 		<div id="" style="text-align: right;">
 
 			<el-tabtitletwo>
-				<el-button type="text" size="small">增加</el-button>
-				<el-button type="text" size="small">修改</el-button>
+				<el-button type="text" size="small" @click="Add()">增加</el-button>
+				<!--增加内容的弹框-->
+				<el-dialog title="增加内容" :visible.sync="addDialog" center>
+					<el-form :inline="true" :model="studentForm" label-width="84px" :rules="rules" ref="studentForm" status-icon>
+						<el-form-item label="序号">
+							<el-input v-model="studentForm.num"></el-input>
+						</el-form-item>
+						<el-form-item label="姓名" prop="name">
+							<el-input v-model="studentForm.name"></el-input>
+						</el-form-item>
+						<el-form-item label="日期" prop="sex">
+							<el-input v-model="studentForm.data"></el-input>
+						</el-form-item>
+						<el-form-item label="地址" prop="sex">
+							<el-input v-model="studentForm.address"></el-input>
+						</el-form-item>
+						<!--<template slot-scope="scope">
+								<el-button size="small">修改</el-button>
+								<el-button type="danger" size="small" @click.native.prevent="deleteRow(scope.$index, tableData)">删除</el-button>
+							</template>-->
+						</el-table-column>
+					</el-form>
+					<span slot="footer" class="dialog-footer">
+            <el-button @click="addCancel('studentForm')">取 消</el-button>
+            <el-button type="primary" @click="addSubmit('studentForm')">确 定</el-button>
+          </span>
+				</el-dialog>
+				<!--增加内容的弹框-->
+				<!--<el-button type="text" size="small" @click="onEdit(scope.$index,scope.row)">修改</el-button>-->
+
 				<!--修改内容的弹框-->
-				
-				<el-button  @click="delet" type="text" size="small">删除</el-button>
+				<!--<el-button @click="delet" type="text" size="small">删除</el-button>-->
 			</el-tabtitletwo>
 
 		</div>
@@ -40,11 +67,34 @@
 			<el-table-column prop="address" label="地址"></el-table-column>
 			<el-table-column label="操作" width="210">
 				<template slot-scope="scope">
-					<el-button size="small">修改</el-button>
-					<el-button type="danger" size="small" @click.native.prevent="deleteRow(scope.$index, tableData)" >删除</el-button>
+					<el-button size="small" @click="onEdit(scope.$index,scope.row)">修改</el-button>
+
+					<el-button type="danger" size="small" @click.native.prevent="deleteRow(scope.$index, tableData)">删除</el-button>
 				</template>
 			</el-table-column>
 		</el-table>
+		<el-dialog title="修改数据" :visible.sync="editFormVisible">
+			<el-form :model="editForm" :rules="rules" ref="editForm" label-width="100px" class="demo-ruleForm" inline>
+				<el-form-item label="id" prop="id">
+					<el-input v-model="editForm.id"></el-input>
+				</el-form-item>
+				<el-form-item label="姓名" prop="name">
+					<el-input v-model="editForm.name"></el-input>
+				</el-form-item>
+				<el-form-item label="地址" prop="meaning">
+					<el-input v-model="editForm.address"></el-input>
+				</el-form-item>
+				<el-form-item label="时间" prop="type1">
+					<el-input v-model="editForm.data"></el-input>
+				</el-form-item>
+				
+				
+			</el-form>
+			<div slot="footer" class="dialog-footer">
+				<el-button @click="editCancel()">取 消</el-button>
+				<el-button type="primary" @click="editSubmit('editForm')">确 定</el-button>
+			</div>
+		</el-dialog>
 		<el-pagination style="text-align:right;" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400"></el-pagination>
 	</el-card>
 </template>
@@ -70,6 +120,46 @@
 <script>
 	export default {
 		methods: {
+			// 修改表格某一行数据
+			onEdit(index, row) {
+				this.editFormVisible = true;
+				this.editForm = row;
+			},
+			// 确认修改
+			editSubmit(formName) {
+				this.$refs[formName].validate(valid => {
+					if(valid) {
+						this.editFormVisible = false;
+					} else {
+						console.log("error submit!!");
+						return false;
+					}
+				});
+			},
+			// 取消修改
+			editCancel() {
+				this.editFormVisible = false;
+			},
+			// 取消编辑
+			OnEditCancel() {
+				this.studentDialog = false;
+			},
+			Add() {
+				console.log(this.$store.getters.doneTodos)
+
+				this.addDialog = true;
+				console.log(this.$store.state.count)
+			},
+			// 确认添加
+			addSubmit() {
+				this.tableData.push(this.studentForm)
+				this.addDialog = false;
+			},
+			// 确认添加
+			addCancel() {
+
+				this.addDialog = false;
+			},
 			handleClick(row) {
 				console.log(row);
 			},
@@ -88,26 +178,35 @@
 				return "";
 			},
 			delet() {
-        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          });
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });          
-        });
-      }
-    
+				this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(() => {
+					this.$message({
+						type: 'success',
+						message: '删除成功!'
+					});
+				}).catch(() => {
+					this.$message({
+						type: 'info',
+						message: '已取消删除'
+					});
+				});
+			}
+
 		},
 		data() {
 			return {
+				studentDialog: false,
+				editFormVisible: false,
+				addDialog: false,
+				studentForm: {
+					name: "",
+					address: "",
+					date: "",
+
+				},
 				formInline: {
 					user: "",
 					region: ""
@@ -133,6 +232,11 @@
 						address: "上海市普陀区金沙江路 1518 弄"
 					}
 				],
+				editForm: {
+					name: "",
+					address: "",
+					date: "",
+				},
 				options: [{
 					value: '选项1',
 					label: '启用'
