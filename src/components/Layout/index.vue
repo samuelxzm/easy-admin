@@ -6,7 +6,7 @@
     >
       <div v-if="sidebarLogo" class="logo">
         <img src="@/assets/images/logo.png" />
-        <span v-if="!sidebarOpened">公益运营平台</span>
+        <span v-if="!sidebarOpened">元数据管理平台</span>
       </div>
       <el-scrollbar
         wrap-class="sidemenu-scrollbar__wrap"
