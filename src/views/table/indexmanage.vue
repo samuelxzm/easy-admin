@@ -1,8 +1,6 @@
 <template>
   <el-card style="min-height:100%;box-sizing:border-box;border-radius:0;">
-
     <div class="add_btn">
-
       <el-button size="small">索引列管理</el-button>
       <el-button size="small" @click="addTableData()">增加</el-button>
     </div>
@@ -253,26 +251,22 @@ export default {
     clickCurrent(e) {
       this.currentRow = e.number;
     },
-    manageField(){
-      if(!this.currentRow){
+    manageField() {
+      if (!this.currentRow) {
         this.$message({
           showClose: true,
-          message: '请选择数据表进行管理'
+          message: "请选择数据表进行管理"
         });
-      }
-      else{
-        
+      } else {
       }
     },
-    manageIndex(){
-      if(!this.currentRow){
+    manageIndex() {
+      if (!this.currentRow) {
         this.$message({
           showClose: true,
-          message: '请选择数据表进行管理'
+          message: "请选择数据表进行管理"
         });
-      }
-      else{
-        
+      } else {
       }
     }
   }

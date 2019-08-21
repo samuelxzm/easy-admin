@@ -267,26 +267,24 @@ export default {
     clickCurrent(e) {
       this.currentRow = e.number;
     },
-    manageField(){
-      if(!this.currentRow){
+    manageField() {
+      if (!this.currentRow) {
         this.$message({
           showClose: true,
-          message: '请选择数据表进行管理'
+          message: "请选择数据表进行管理"
         });
-      }
-      else{
-        this.$router.push('fieldmanage')
+      } else {
+        this.$router.push("fieldmanage");
       }
     },
-    manageIndex(){
-      if(!this.currentRow){
+    manageIndex() {
+      if (!this.currentRow) {
         this.$message({
           showClose: true,
-          message: '请选择数据表进行管理'
+          message: "请选择数据表进行管理"
         });
-      }
-      else{
-         this.$router.push('indexmanage')
+      } else {
+        this.$router.push("indexmanage");
       }
     }
   }

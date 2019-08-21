@@ -15,6 +15,7 @@
       :current-row-key="number"
       @current-change="clickCurrent"
     >
+    
       <el-table-column prop="number" label="id" width="180"></el-table-column>
       <el-table-column prop="mean" label="字段名称" width="180"></el-table-column>
       <el-table-column prop="type" label="字段含义"></el-table-column>
