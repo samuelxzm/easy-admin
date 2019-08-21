@@ -1,23 +1,9 @@
 <template>
   <el-card style="min-height:100%;box-sizing:border-box;border-radius:0;">
     <!-- 数据表搜索 -->
-    <el-form :inline="true" :model="formInline" size="small" class="demo-form-inline">
-      <el-form-item label="id">
-        <el-input v-model="formInline.id" placeholder="id"></el-input>
-      </el-form-item>
-      <el-form-item label="表含义">
-        <el-input v-model="formInline.mean" placeholder="表含义"></el-input>
-      </el-form-item>
-      <el-form-item label="数据类型">
-        <el-input v-model="formInline.type" placeholder="数据类型"></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" icon="el-icon-search" @click="onSubmit">查询</el-button>
-      </el-form-item>
-    </el-form>
+
     <div class="add_btn">
-      <el-button size="small" @click="manageField()">字段管理</el-button>
-      <el-button size="small" @click="manageIndex()">索引管理</el-button>
+      <el-button size="small">增加标准字段</el-button>
       <el-button size="small" @click="addTableData()">增加</el-button>
     </div>
     <!-- 数据表表格 -->
@@ -30,10 +16,10 @@
       @current-change="clickCurrent"
     >
       <el-table-column prop="number" label="id" width="180"></el-table-column>
-      <el-table-column prop="mean" label="表含义" width="180"></el-table-column>
-      <el-table-column prop="type" label="数据表类型"></el-table-column>
-      <el-table-column prop="mode" label="id生成方式"></el-table-column>
-      <el-table-column prop="status" label="状态"></el-table-column>
+      <el-table-column prop="mean" label="字段名称" width="180"></el-table-column>
+      <el-table-column prop="type" label="字段含义"></el-table-column>
+      <el-table-column prop="mode" label="字段类型"></el-table-column>
+      <el-table-column prop="status" label="数据类型"></el-table-column>
       <el-table-column prop="remark" label="备注"></el-table-column>
       <el-table-column label="操作" width="180">
         <template slot-scope="scope">
@@ -266,28 +252,6 @@ export default {
     },
     clickCurrent(e) {
       this.currentRow = e.number;
-    },
-    manageField(){
-      if(!this.currentRow){
-        this.$message({
-          showClose: true,
-          message: '请选择数据表进行管理'
-        });
-      }
-      else{
-        this.$router.push('fieldmanage')
-      }
-    },
-    manageIndex(){
-      if(!this.currentRow){
-        this.$message({
-          showClose: true,
-          message: '请选择数据表进行管理'
-        });
-      }
-      else{
-         this.$router.push('indexmanage')
-      }
     }
   }
 };

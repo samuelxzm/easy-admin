@@ -14,7 +14,7 @@ if(settings.useAjaxRouter){
     if (!getRouter) {
       if (!getObjArr('router')) {
         axios.get('https://www.easy-mock.com/mock/5d2bef4b2ca43008a83cba68/example/getRouter').then(res => {
-          getRouter = res.data.data.router//后台拿到路由
+          getRouter = res.data.router//后台拿到路由
       
           saveObjArr('router', getRouter) //存储路由到localStorage
           routerGo(to, next)//执行路由跳转方法

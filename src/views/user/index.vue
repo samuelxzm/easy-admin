@@ -1,29 +1,25 @@
 <template>
 	<el-card style="min-height:100%;box-sizing:border-box;border-radius:0;">
-
 		<div style="width: 100%;margin:0 auto;text-align: left;">
-			<el-div type="text" size="small">
+			<div type="text" size="small">
 				代码：
 				<el-input style="width: 50px;" size="mini" placeholder="" />
-			</el-div>
-			<el-div type="text" size="small">
+			</div>
+			<div type="text" size="small">
 				名称：
 				<el-input style="width: 50px;" size="mini" placeholder="" />
-			</el-div>
-			<el-div type="text" size="small">
+			</div>
+			<div type="text" size="small">
 				状态：
 				<el-select v-model="value" placeholder="请选择" style="width: 100px;">
 					<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 					</el-option>
 				</el-select>
-			</el-div>
-
+			</div>
 			<el-input style="width: 150px;" 
 				size="mini" placeholder="输入关键字搜索" />
-
 		</div>
 		<div id="" style="text-align: right;">
-
 			<div>
 				<el-button type="text" size="small" @click="Add()">增加</el-button>
 				<!--增加内容的弹框-->
@@ -41,22 +37,12 @@
 						<el-form-item label="地址" prop="sex">
 							<el-input v-model="studentForm.address"></el-input>
 						</el-form-item>
-						<!--<template slot-scope="scope">
-								<el-button size="small">修改</el-button>
-								<el-button type="danger" size="small" @click.native.prevent="deleteRow(scope.$index, tableData)">删除</el-button>
-							</template>-->
-						</el-table-column>
 					</el-form>
 					<span slot="footer" class="dialog-footer">
             <el-button @click="addCancel('studentForm')">取 消</el-button>
             <el-button type="primary" @click="addSubmit('studentForm')">确 定</el-button>
           </span>
 				</el-dialog>
-				<!--增加内容的弹框-->
-				<!--<el-button type="text" size="small" @click="onEdit(scope.$index,scope.row)">修改</el-button>-->
-
-				<!--修改内容的弹框-->
-				<!--<el-button @click="delet" type="text" size="small">删除</el-button>-->
 			</div>
 
 		</div>

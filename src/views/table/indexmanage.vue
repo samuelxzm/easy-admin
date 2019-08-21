@@ -1,23 +1,9 @@
 <template>
   <el-card style="min-height:100%;box-sizing:border-box;border-radius:0;">
-    <!-- 数据表搜索 -->
-    <el-form :inline="true" :model="formInline" size="small" class="demo-form-inline">
-      <el-form-item label="id">
-        <el-input v-model="formInline.id" placeholder="id"></el-input>
-      </el-form-item>
-      <el-form-item label="表含义">
-        <el-input v-model="formInline.mean" placeholder="表含义"></el-input>
-      </el-form-item>
-      <el-form-item label="数据类型">
-        <el-input v-model="formInline.type" placeholder="数据类型"></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" icon="el-icon-search" @click="onSubmit">查询</el-button>
-      </el-form-item>
-    </el-form>
+
     <div class="add_btn">
-      <el-button size="small" @click="manageField()">字段管理</el-button>
-      <el-button size="small" @click="manageIndex()">索引管理</el-button>
+
+      <el-button size="small">索引列管理</el-button>
       <el-button size="small" @click="addTableData()">增加</el-button>
     </div>
     <!-- 数据表表格 -->
@@ -30,10 +16,10 @@
       @current-change="clickCurrent"
     >
       <el-table-column prop="number" label="id" width="180"></el-table-column>
-      <el-table-column prop="mean" label="表含义" width="180"></el-table-column>
-      <el-table-column prop="type" label="数据表类型"></el-table-column>
-      <el-table-column prop="mode" label="id生成方式"></el-table-column>
-      <el-table-column prop="status" label="状态"></el-table-column>
+      <el-table-column prop="mean" label="索引字段" width="180"></el-table-column>
+      <el-table-column prop="type" label="是否主键"></el-table-column>
+      <el-table-column prop="mode" label="是否物理索引"></el-table-column>
+      <el-table-column prop="status" label="是否唯一索引"></el-table-column>
       <el-table-column prop="remark" label="备注"></el-table-column>
       <el-table-column label="操作" width="180">
         <template slot-scope="scope">
@@ -275,7 +261,7 @@ export default {
         });
       }
       else{
-        this.$router.push('fieldmanage')
+        
       }
     },
     manageIndex(){
@@ -286,7 +272,7 @@ export default {
         });
       }
       else{
-         this.$router.push('indexmanage')
+        
       }
     }
   }
