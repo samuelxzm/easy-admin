@@ -32,7 +32,7 @@
 							<el-input v-model="studentForm.name"></el-input>
 						</el-form-item>
 						<el-form-item label="日期" prop="sex">
-							<el-input v-model="studentForm.data"></el-input>
+							<el-input v-model="studentForm.date"></el-input>
 						</el-form-item>
 						<el-form-item label="地址" prop="sex">
 							<el-input v-model="studentForm.address"></el-input>
@@ -72,7 +72,7 @@
 					<el-input v-model="editForm.address"></el-input>
 				</el-form-item>
 				<el-form-item label="时间" prop="type1">
-					<el-input v-model="editForm.data"></el-input>
+					<el-input v-model="editForm.date"></el-input>
 				</el-form-item>
 				
 				
