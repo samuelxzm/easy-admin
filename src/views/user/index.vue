@@ -1,7 +1,7 @@
 <template>
 	<el-card style="min-height:100%;box-sizing:border-box;border-radius:0;">
 
-		<div style="width: 100%;margin:0 auto;text-align: left;">
+		<div] style="width: 100%;margin:0 auto;text-align: left;">
 			<el-div type="text" size="small">
 				代码：
 				<el-input style="width: 50px;" size="mini" placeholder="" />
@@ -36,7 +36,7 @@
 							<el-input v-model="studentForm.name"></el-input>
 						</el-form-item>
 						<el-form-item label="日期" prop="sex">
-							<el-input v-model="studentForm.data"></el-input>
+							<el-input v-model="studentForm.date"></el-input>
 						</el-form-item>
 						<el-form-item label="地址" prop="sex">
 							<el-input v-model="studentForm.address"></el-input>
@@ -86,7 +86,7 @@
 					<el-input v-model="editForm.address"></el-input>
 				</el-form-item>
 				<el-form-item label="时间" prop="type1">
-					<el-input v-model="editForm.data"></el-input>
+					<el-input v-model="editForm.date"></el-input>
 				</el-form-item>
 				
 				
