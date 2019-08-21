@@ -3,10 +3,10 @@
     <!-- 条件查询 -->
     <el-form :inline="true" :model="formModule" size="small" class="demo-form-inline">
       <el-form-item label="id">
-        <el-input v-model="formModule.id"></el-input>
+        <el-input placeholder="id" v-model="formModule.id"></el-input>
       </el-form-item>
       <el-form-item label="字段名称">
-        <el-input v-model="formModule.name"></el-input>
+        <el-input placeholder="字段名称" v-model="formModule.name"></el-input>
       </el-form-item>
       <el-form-item label="查询范围">
         <el-select v-model="formModule.range">
@@ -34,7 +34,7 @@
       :row-class-name="tableRowClassName"
       style="width: 100%"
     >
-      <el-table-column type="index" align="center"></el-table-column>
+      <el-table-column type="index" label=" " align="center"></el-table-column>
       <el-table-column prop="id" width="150" label="id"></el-table-column>
       <el-table-column prop="name" label="字段名称"></el-table-column>
       <el-table-column prop="meaning" label="字段含义"></el-table-column>
@@ -148,17 +148,17 @@
 export default {
   data() {
     return {
-      name1: "xujun",
-      name2: "",
-      currentPage4:4,
-      addFormVisible: false,
-      editFormVisible: false,
+      currentPage4:4,//当前页
+      addFormVisible: false,//控制添加数据弹出框
+      editFormVisible: false,//控制修改数据弹出框
+      //搜索条件
       formModule: {
         id: "",
         name: "",
         range: "",
         status: ""
       },
+      //添加数据表单
       addForm: {
         id: "",
         name: "",
@@ -170,6 +170,7 @@ export default {
         default: "newid()",
         sort: ""
       },
+      //修改数据表单
       editForm: {
         id: "",
         name: "",
@@ -181,6 +182,7 @@ export default {
         default: "",
         sort: ""
       },
+      // 校验规则
       rules: {
         id: [{ required: true, message: "请输入id", trigger: "blur" }],
         name: [
@@ -192,6 +194,7 @@ export default {
         ],
         type1: [{ required: true, message: "请输入字段类型", trigger: "blur" }]
       },
+      // 表格数据
       tableData: [
         {
           id: "module_id",
@@ -259,6 +262,10 @@ export default {
         return "success-row";
       }
       return "";
+    },
+    // 点击搜索按钮
+    onSubmit(){
+
     },
     // 增加一行数据
     formAdd() {
