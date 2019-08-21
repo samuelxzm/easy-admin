@@ -1,7 +1,7 @@
 <template>
 	<el-card style="min-height:100%;box-sizing:border-box;border-radius:0;">
 
-		<el-tabtitleone style="width: 100%;margin:0 auto;text-align: left;">
+		<div style="width: 100%;margin:0 auto;text-align: left;">
 			<el-div type="text" size="small">
 				代码：
 				<el-input style="width: 50px;" size="mini" placeholder="" />
@@ -18,16 +18,17 @@
 				</el-select>
 			</el-div>
 
-			<el-input style="width: 150px;" v-model="search" size="mini" placeholder="输入关键字搜索" />
+			<el-input style="width: 150px;" 
+				size="mini" placeholder="输入关键字搜索" />
 
-		</el-tabtitleone>
+		</div>
 		<div id="" style="text-align: right;">
 
-			<el-tabtitletwo>
+			<div>
 				<el-button type="text" size="small" @click="Add()">增加</el-button>
 				<!--增加内容的弹框-->
 				<el-dialog title="增加内容" :visible.sync="addDialog" center>
-					<el-form :inline="true" :model="studentForm" label-width="84px" :rules="rules" ref="studentForm" status-icon>
+					<el-form :inline="true" :model="studentForm" label-width="84px"  ref="studentForm" status-icon>
 						<el-form-item label="序号">
 							<el-input v-model="studentForm.num"></el-input>
 						</el-form-item>
@@ -56,7 +57,7 @@
 
 				<!--修改内容的弹框-->
 				<!--<el-button @click="delet" type="text" size="small">删除</el-button>-->
-			</el-tabtitletwo>
+			</div>
 
 		</div>
 		<el-table border :data="tableData" style="width: 100%" :row-class-name="tableRowClassName">
@@ -74,7 +75,7 @@
 			</el-table-column>
 		</el-table>
 		<el-dialog title="修改数据" :visible.sync="editFormVisible">
-			<el-form :model="editForm" :rules="rules" ref="editForm" label-width="100px" class="demo-ruleForm" inline>
+			<el-form :model="editForm"  ref="editForm" label-width="100px" class="demo-ruleForm" inline>
 				<el-form-item label="id" prop="id">
 					<el-input v-model="editForm.id"></el-input>
 				</el-form-item>
@@ -95,7 +96,7 @@
 				<el-button type="primary" @click="editSubmit('editForm')">确 定</el-button>
 			</div>
 		</el-dialog>
-		<el-pagination style="text-align:right;" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400"></el-pagination>
+		<el-pagination style="text-align:right;"    :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400"></el-pagination>
 	</el-card>
 </template>
 <style>
