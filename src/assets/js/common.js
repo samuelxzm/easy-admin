@@ -38,10 +38,7 @@ axios.interceptors.response.use((response) => {
         // todo
     }
     else{
-        Message.error({
-            message: data.msg
-        });
-        return Promise.reject(data.msg);
+return data
     }
 }, (err) => { // 这里是返回状态码不为200时候的错误处理
     if (err && err.response) {
@@ -96,6 +93,7 @@ axios.interceptors.response.use((response) => {
             message: err.message
         });
     }
+
     return Promise.reject(err)
 })
 axios.install = (Vue) => {
