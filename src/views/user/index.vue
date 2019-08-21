@@ -1,7 +1,7 @@
 <template>
 	<el-card style="min-height:100%;box-sizing:border-box;border-radius:0;">
 
-		<div] style="width: 100%;margin:0 auto;text-align: left;">
+		<div style="width: 100%;margin:0 auto;text-align: left;">
 			<el-div type="text" size="small">
 				代码：
 				<el-input style="width: 50px;" size="mini" placeholder="" />

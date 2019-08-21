@@ -155,6 +155,7 @@ export default {
       editFormVisible: false,
       formModule: {
         id: "",
+        
         name: "",
         range: "",
         status: ""
