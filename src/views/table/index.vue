@@ -110,6 +110,7 @@
 </template>
 <script>
 import { constants } from "crypto";
+import { guid } from "@/assets/js/common.js";
 export default {
   // 数据
   data() {
@@ -202,10 +203,10 @@ export default {
       currentRow: ""
     };
   },
-  created(){
-this.getRequest('/api/table/select/all').then(result => {
-console.log(result)
-        });
+  created() {
+    let uuid = guid();
+    console.log(uuid);
+    this.getRequest("/api/table/select/all").then(result => {});
   },
   //方法
   methods: {
