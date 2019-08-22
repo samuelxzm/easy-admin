@@ -17,7 +17,7 @@ export const constantRoutes = [
       {
         path: 'user',
         name: '登陆',
-        component: () => import('@/views/user/index')
+        component: () => import('@/views/table/index')
       }
     ]
   }
@@ -27,7 +27,7 @@ const createRouter = () => new Router({
   scrollBehavior: () => ({ y: 0 }),
   routes: constantRoutes
 })
-
+global.antRouter=[]
 const router = createRouter()
 // Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
 // export function resetRouter() {

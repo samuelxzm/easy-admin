@@ -1,6 +1,7 @@
 import axios from 'axios'
 import FileSaver from "file-saver"
 import XLSX from "xlsx"
+import qs from 'qs'//引入QS包装data数据
 import {
     Message,
     MessageBox
@@ -22,13 +23,13 @@ axios.interceptors.response.use((response) => {
     if(data.code==0){
         return data.data
     }
-    else if(data.code==-200){
-        if (window.location.pathname == '/login' | '/') {
-        }
-        else {
-            location.replace(`/login`)
-        }
-    }
+    // else if(data.code==-200){
+    //     if (window.location.pathname == '/login' | '/') {
+    //     }
+    //     else {
+    //         location.replace(`/login`)
+    //     }
+    // }
     else if(data.code==-600){
 
             location.replace(`/maintenance`)
