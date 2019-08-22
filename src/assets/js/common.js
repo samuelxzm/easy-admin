@@ -122,9 +122,6 @@ export const getRequest = (url, params) => {
         }
     });
 }
-
-
-
 /**
  * @description
  *  提交表单--增加和删除
