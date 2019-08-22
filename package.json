@@ -1,6 +1,6 @@
 {
   "name": "vue-framework-xzm",
-  "main":"src/main.js",
+  "main": "src/main.js",
   "version": "0.1.0",
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -19,8 +19,10 @@
     "js-cookie": "^2.2.0",
     "normalize.css": "^8.0.1",
     "nprogress": "^0.2.0",
+    "qs": "^6.8.0",
     "screenfull": "^4.2.0",
     "vue": "^2.6.10",
+    "vue-axios": "^2.1.4",
     "vue-count-to": "^1.0.13",
     "vue-router": "^3.0.7",
     "vuex": "^3.1.1",

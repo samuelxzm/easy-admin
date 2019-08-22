@@ -6,6 +6,9 @@ import {
     Message,
     MessageBox
 } from 'element-ui'
+// axios.defaults.withCredentials = true // 带cookie请求
+// axios.defaults.timeout = 5000 //  请求的超时时间 5000ms
+// axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
 axios.interceptors.request.use(config => {
     return config;
 }, err => {
@@ -17,11 +20,8 @@ axios.interceptors.request.use(config => {
 
 // 拦截响应response，并做一些错误处理
 axios.interceptors.response.use((response) => {
-    console.log(response)
-    return response
     const data = response.data;
     // 根据返回的code值来做不同的处理（和后端约定）
-
     //     data.code=parseInt(data.code)
     //     if(data.code==0){
     //         return data.data
@@ -40,7 +40,7 @@ axios.interceptors.response.use((response) => {
     //         // todo
     //     }
     //     else{
-    // return data
+    return data
     //     }
 }, (err) => { // 这里是返回状态码不为200时候的错误处理
     if (err && err.response) {
@@ -100,16 +100,21 @@ axios.interceptors.response.use((response) => {
 axios.install = (Vue) => {
     Vue.prototype.$axios = axios
 }
+/**
+ * 封装post请求
+ * @param url
+ * @param data
+ * @returns {Promise}
+ */
+
 
 export const postRequest = (url, data) => {
-    // console.log(data)
-    // return axios.post(url,data)
     return axios({
         method: 'post',
         url: `${url}`,
-        data: qs.stringify(data),
+        data: data,
         headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
+            'Content-Type': 'application/json'
         }
     });
 }
@@ -119,7 +124,7 @@ export const getRequest = (url, params) => {
         url: `${url}`,
         params: params,
         headers: {
-            'content-type': 'application/x-www-form-urlencoded'
+            'Content-type': 'application/x-www-form-urlencoded'
         }
     });
 }
@@ -139,25 +144,22 @@ export const getRequest = (url, params) => {
  * @author wy 20181031
  * @version V0.0.1
  */
-function SubmitForm(vim, formName, formDataKey, type, addSqlId, changeSqlId, callback) {
+function SubmitForm(vim, formName, formDataKey, type, addUrl, editUrl, callback) {
     let that = vim;
     var data = Object.assign({}, that[formDataKey])
-    if (data.buyTime) {
-        data.buyTime = data.buyTime / 1000
-    }
     that.$refs[formName].validate(function (valid) {
         if (valid) {
             if (type == "add") {
                 that.$axios
-                    .post(addSqlId, that.$qs.stringify(data), {
+                    .post(addUrl, data, {
                         headers: {
-                            "Content-Type": "application/x-www-form-urlencoded"
+                            "Content-Type": "application/json"
                         }
                     })
                     .then(result => {
                         if (result) {
                             if (result == "error") {
-                                that.$message.error("账号已存在");
+                                that.$message.error("添加失败");
                             }
                             else {
                                 that.$message({
@@ -167,7 +169,6 @@ function SubmitForm(vim, formName, formDataKey, type, addSqlId, changeSqlId, cal
                             }
                             callback(result);
                         }
-
                         else {
                             that.$message.error("增加失败");
                         }
@@ -175,13 +176,13 @@ function SubmitForm(vim, formName, formDataKey, type, addSqlId, changeSqlId, cal
             } else {
                 // //修改
                 that.$axios
-                    .post(changeSqlId, that.$qs.stringify(data), {
+                    .post(editUrl, data, {
                         headers: {
-                            "Content-Type": "application/x-www-form-urlencoded"
+                            "Content-Type": "application/json"
                         }
                     })
                     .then(result => {
-                        if (result >= 0) {
+                        if (result) {
                             that.$message({
                                 message: "修改成功！",
                                 type: "success"
@@ -239,7 +240,7 @@ function ExportExcel(id, fileName) {
  * @author xzm 20181217
  * @version V0.0.1
  */
-function DeleteStatus(vim, tableName, itemId, callback) {
+function DeleteStatus(vim, deleteUrl, data, callback) {
     var that = vim;
     that.$confirm('是否确认删除?', '提示', {
         cancelButtonText: '取消',
@@ -248,8 +249,8 @@ function DeleteStatus(vim, tableName, itemId, callback) {
         callback: function (action) {
             if (action == "confirm") {
                 //调用删除接口删除
-                that.getRequest('/api/delete/' + tableName + '/isDelete/' + itemId).then(isdelete => {
-                    if (isdelete == null) {
+                that.postRequest(deleteUrl,data).then(isdelete => {
+                    if (isdelete) {
                         that.$message({
                             message: '删除成功！',
                             type: 'success'
