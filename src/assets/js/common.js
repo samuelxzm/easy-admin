@@ -1,6 +1,7 @@
 import axios from 'axios'
 import FileSaver from "file-saver"
 import XLSX from "xlsx"
+import qs from 'qs'//引入QS包装data数据
 import {
     Message,
     MessageBox
@@ -16,30 +17,31 @@ axios.interceptors.request.use(config => {
 
 // 拦截响应response，并做一些错误处理
 axios.interceptors.response.use((response) => {
+    console.log(response)
+    return response
     const data = response.data;
     // 根据返回的code值来做不同的处理（和后端约定）
-    data.code=parseInt(data.code)
-    if(data.code==0){
-        return data.data
-    }
-    else if(data.code==-200){
-        if (window.location.pathname == '/login' | '/') {
-        }
-        else {
-            location.replace(`/login`)
-        }
-    }
-    else if(data.code==-600){
 
-            location.replace(`/maintenance`)
-        
-    }
-    else if(data.code==-205){
-        // todo
-    }
-    else{
-return data
-    }
+    //     data.code=parseInt(data.code)
+    //     if(data.code==0){
+    //         return data.data
+    //     }
+    //     // else if(data.code==-200){
+    //     //     if (window.location.pathname == '/login' | '/') {
+    //     //     }
+    //     //     else {
+    //     //         location.replace(`/login`)
+    //     //     }
+    //     // }
+    //     else if(data.code==-600){
+    //             location.replace(`/maintenance`)
+    //     }
+    //     else if(data.code==-205){
+    //         // todo
+    //     }
+    //     else{
+    // return data
+    //     }
 }, (err) => { // 这里是返回状态码不为200时候的错误处理
     if (err && err.response) {
         switch (err.response.status) {
@@ -93,7 +95,6 @@ return data
             message: err.message
         });
     }
-
     return Promise.reject(err)
 })
 axios.install = (Vue) => {
@@ -286,11 +287,18 @@ function formatDate(date, fmt) {
 function padLeftZero(str) {
     return ('00' + str).substr(str.length);
 }
-
+//用于生成uuid
+function S4() {
+    return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+}
+function guid() {
+    return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
+}
 export default axios
 export {
     SubmitForm,
     ExportExcel,
     DeleteStatus,
-    formatDate
+    formatDate,
+    guid
 }

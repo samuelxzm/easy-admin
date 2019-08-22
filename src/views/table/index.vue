@@ -26,15 +26,21 @@
       :data="tableData"
       style="width: 100%"
       highlight-current-row
-      :current-row-key="number"
+      :current-row-key="tableRowClassName"
       @current-change="clickCurrent"
     >
-      <el-table-column prop="number" label="id" width="180"></el-table-column>
-      <el-table-column prop="mean" label="表含义" width="180"></el-table-column>
-      <el-table-column prop="type" label="数据表类型"></el-table-column>
-      <el-table-column prop="mode" label="id生成方式"></el-table-column>
+      <el-table-column prop="projectId" label="项目id" width="180"></el-table-column>
+      <el-table-column prop="moduleId" label="模块id" width="180"></el-table-column>
+      <el-table-column prop="idType" label="id类型"></el-table-column>
+      <el-table-column prop="name" label="数据表的物理名称"></el-table-column>
+      <el-table-column prop="title" label="数据表含义"></el-table-column>
+      <el-table-column prop="shortName" label="简称"></el-table-column>
+      <el-table-column prop="type" label="类型"></el-table-column>
+      <el-table-column prop="summary" label="简介"></el-table-column>
+      <el-table-column prop="remarks" label="备注"></el-table-column>
+      <el-table-column prop="sortNo" label="排序码"></el-table-column>
       <el-table-column prop="status" label="状态"></el-table-column>
-      <el-table-column prop="remark" label="备注"></el-table-column>
+      <el-table-column prop="createUser" label="记录创建人"></el-table-column>
       <el-table-column label="操作" width="180">
         <template slot-scope="scope">
           <el-button size="small" @click="handleUpdate(scope.$index, scope.row)">修改</el-button>
@@ -55,23 +61,35 @@
     <!-- 添加数据 -->
     <el-dialog title="数据表管理" :visible.sync="dialogAddVisible">
       <el-form :model="form" :rules="addRules" ref="form" :inline="true" size="small">
-        <el-form-item label="id" prop="number" :label-width="formLabelWidth">
-          <el-input v-model="form.number" autocomplete="off"></el-input>
+        <el-form-item label="项目id" prop="projectId" :label-width="formLabelWidth">
+          <el-input v-model="form.projectId" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="表含义" prop="mean" :label-width="formLabelWidth">
-          <el-input v-model="form.mean" autocomplete="off"></el-input>
+        <el-form-item label="模块id" prop="moduleId" :label-width="formLabelWidth">
+          <el-input v-model="form.moduleId" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="数据表类型" prop="type" :label-width="formLabelWidth">
+        <el-form-item label="id类型" prop="idType" :label-width="formLabelWidth">
+          <el-input v-model="form.idType" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="数据表的物理名称" prop="name" :label-width="formLabelWidth">
+          <el-input v-model="form.name" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="数据表含义" prop="title" :label-width="formLabelWidth">
+          <el-input v-model="form.title" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="简称" prop="shortName" :label-width="formLabelWidth">
+          <el-input v-model="form.shortName" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="类型" prop="type" :label-width="formLabelWidth">
           <el-input v-model="form.type" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="id生成方式" prop="mode" :label-width="formLabelWidth">
-          <el-input v-model="form.mode" autocomplete="off"></el-input>
+        <el-form-item label="数据表的物理名称" prop="name" :label-width="formLabelWidth">
+          <el-input v-model="form.name" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="状态" prop="status" :label-width="formLabelWidth">
           <el-input v-model="form.status" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="备注" prop="remark" :label-width="formLabelWidth">
-          <el-input v-model="form.remark" autocomplete="off"></el-input>
+        <el-form-item label="备注" prop="remarks" :label-width="formLabelWidth">
+          <el-input v-model="form.remarks" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -110,6 +128,7 @@
 </template>
 <script>
 import { constants } from "crypto";
+import {guid} from "@assets/js/common.js"
 export default {
   // 数据
   data() {
@@ -121,44 +140,74 @@ export default {
       },
       tableData: [
         {
-          number: "002",
-          mean: "表类型",
-          type: "实体表",
-          mode: "guid方式",
-          status: "启用",
-          remark: "广东省根深蒂固"
+          projectId: "2",
+          moduleId: "2",
+          idType: "2",
+          name: "tables",
+          title: "数据表",
+          shortName: "数据表",
+          type: "实体类",
+          summary: "实体类",
+          remarks: "无",
+          sortNo: "120",
+          status: "1",
+          createUser: "作者"
         },
         {
-          number: "003",
-          mean: "字典管理表",
-          type: "实体表1",
-          mode: "手工录入",
-          status: "禁用",
-          remark: "大萨达撒多"
+          projectId: "2",
+          moduleId: "2",
+          idType: "2",
+          name: "tables",
+          title: "数据表",
+          shortName: "数据表",
+          type: "实体类",
+          summary: "实体类",
+          remarks: "无",
+          sortNo: "120",
+          status: "1",
+          createUser: "作者"
         },
         {
-          number: "004",
-          mean: "字段类型",
-          type: "实体表2",
-          mode: "guid方式",
-          status: "禁用",
-          remark: "工艺申冬奥山东加速度啊"
+          projectId: "2",
+          moduleId: "2",
+          idType: "2",
+          name: "tables",
+          title: "数据表",
+          shortName: "数据表",
+          type: "实体类",
+          summary: "实体类",
+          remarks: "无",
+          sortNo: "120",
+          status: "1",
+          createUser: "作者"
         },
         {
-          number: "005",
-          mean: "启用状态字典",
-          type: "实体表3",
-          mode: "手工录入",
-          status: "启用",
-          remark: "发哦律师费加拉斯附近"
+          projectId: "2",
+          moduleId: "2",
+          idType: "2",
+          name: "tables",
+          title: "数据表",
+          shortName: "数据表",
+          type: "实体类",
+          summary: "实体类",
+          remarks: "无",
+          sortNo: "120",
+          status: "1",
+          createUser: "作者"
         },
         {
-          number: "006",
-          mean: "用户表",
-          type: "哈希表",
-          mode: "guid方式",
-          status: "启用",
-          remark: "伽师瓜垃圾啊斯洛伐克"
+          projectId: "2",
+          moduleId: "2",
+          idType: "2",
+          name: "tables",
+          title: "数据表",
+          shortName: "数据表",
+          type: "实体类",
+          summary: "实体类",
+          remarks: "无",
+          sortNo: "120",
+          status: "1",
+          createUser: "作者"
         }
       ],
       dialogAddVisible: false, //控制添加数据框
@@ -166,50 +215,86 @@ export default {
       currentPage: 1,
       formLabelWidth: "120px",
       form: {
-        number: "",
-        mean: "",
-        type: "",
-        mode: "",
-        status: "",
-        remark: ""
+        projectId: "", //项目id
+        moduleId: "", //模块id
+        idType: "", //id类型
+        name: "", //数据表的物理名称
+        title: "", //数据表含义
+        shortName: "", //简称
+        type: "", //类型
+        summary: "", //简介
+        remarks: "", //备注
+        sortNo: "", //排序码
+        status: "", //状态
+        createUser: "" //记录创建人
       },
       updateData: "",
       //添加数据校验规则
       addRules: {
-        number: [{ required: true, message: "请输入id", trigger: "blur" }],
-        mean: [{ required: true, message: "请输入表含义", trigger: "blur" }],
+        projectId: [
+          { required: true, message: "请输入项目id", trigger: "blur" }
+        ],
+        moduleId: [
+          { required: true, message: "请输入模块id", trigger: "blur" }
+        ],
+        idType: [{ required: true, message: "请输入id类型", trigger: "blur" }],
+        name: [
+          { required: true, message: "请输入数据表的物理名称", trigger: "blur" }
+        ],
+        title: [
+          { required: true, message: "请输入数据表含义", trigger: "blur" }
+        ],
+        shortName: [{ required: true, message: "请输入简称", trigger: "blur" }],
         type: [
           { required: true, message: "请输入数据表类型", trigger: "blur" }
         ],
-        mode: [
-          { required: true, message: "请输入id生成方式", trigger: "blur" }
-        ],
+        summary: [{ required: true, message: "请输入简介", trigger: "blur" }],
+        remarks: [{ required: true, message: "请输入备注", trigger: "blur" }],
+        sortNo: [{ required: true, message: "请输入排序码", trigger: "blur" }],
         status: [{ required: true, message: "请输入状态", trigger: "blur" }],
-        remark: [{ required: true, message: "请输入备注", trigger: "blur" }]
+        createUser: [
+          { required: true, message: "请输入记录创建人", trigger: "blur" }
+        ]
       },
       updateDataRuler: {
-        number: [{ required: true, message: "请输入id", trigger: "blur" }],
-        mean: [{ required: true, message: "请输入表含义", trigger: "blur" }],
+        projectId: [
+          { required: true, message: "请输入项目id", trigger: "blur" }
+        ],
+        moduleId: [
+          { required: true, message: "请输入模块id", trigger: "blur" }
+        ],
+        idType: [{ required: true, message: "请输入id类型", trigger: "blur" }],
+        name: [
+          { required: true, message: "请输入数据表的物理名称", trigger: "blur" }
+        ],
+        title: [
+          { required: true, message: "请输入数据表含义", trigger: "blur" }
+        ],
+        shortName: [{ required: true, message: "请输入简称", trigger: "blur" }],
         type: [
           { required: true, message: "请输入数据表类型", trigger: "blur" }
         ],
-        mode: [
-          { required: true, message: "请输入id生成方式", trigger: "blur" }
-        ],
+        summary: [{ required: true, message: "请输入简介", trigger: "blur" }],
+        remarks: [{ required: true, message: "请输入备注", trigger: "blur" }],
+        sortNo: [{ required: true, message: "请输入排序码", trigger: "blur" }],
         status: [{ required: true, message: "请输入状态", trigger: "blur" }],
-        remark: [{ required: true, message: "请输入备注", trigger: "blur" }]
+        createUser: [
+          { required: true, message: "请输入记录创建人", trigger: "blur" }
+        ]
       },
       currentRow: ""
     };
   },
-  created(){
-this.getRequest('/api/table/select/all').then(result => {
-console.log(result)
-        });
+  // 获取数据
+  created() {
+    this.getRequest("/api/table/select/all").then(result => {
+      console.log(result);
+    });
   },
   //方法
   methods: {
     onSubmit() {
+      let uuid = guid();
       console.log("submit!");
     },
     tableRowClassName({ row, rowIndex }) {
@@ -246,6 +331,10 @@ console.log(result)
       var that = this;
       that.$refs[form].validate(valid => {
         if (valid) {
+          console.log(that.form);
+          that.postRequest("/api/table/insert").then(result => {
+            console.log(result);
+          });
           that.dialogAddVisible = false;
         } else {
           console.log("error submit!!");
