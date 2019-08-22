@@ -6,7 +6,6 @@ import './icons' // icon
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import store from '@/store'
-
 // Vue.prototype.$axios = axios;
 
 import axios from './assets/js/common.js' //引入axios
