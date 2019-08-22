@@ -2,21 +2,21 @@
 	<el-card style="min-height:100%;box-sizing:border-box;border-radius:0;">
 
 		<div style="width: 100%;margin:0 auto;text-align: left;" :model="formModule">
-			<el-div type="text" size="small">
+			<span type="text" size="small">
 				代码：
 				<el-input style="width: 100px;" size="mini" placeholder="" v-model="formModule.range"/>
-			</el-div>
-			<el-div type="text" size="small">
+			</span>
+			<span type="text" size="small">
 				名称：
-				<el-input style="width: 100px;" size="mini" placeholder="" v-model="formModule.status" placeholder="启用"/>
-			</el-div>
-			<el-div type="text" size="small">
+				<el-input style="width: 100px;" size="mini" placeholder="" v-model="formModule.statu" placeholder="启用"/>
+			</span>
+			<span type="text" size="small">
 				状态：
 				<el-select v-model="value" placeholder="请选择" style="width: 100px;">
 					<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 					</el-option>
 				</el-select>
-			</el-div>
+			</span>
 
 			<el-input style="width: 150px;" size="mini" placeholder="输入关键字搜索" />
 
@@ -200,9 +200,8 @@
 
 				},
 				formModule: {
-					
 					range: "",
-					status: ""
+					statu: ""
 				},
 				formInline: {
 					user: "",
