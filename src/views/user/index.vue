@@ -1,30 +1,33 @@
 <template>
 	<el-card style="min-height:100%;box-sizing:border-box;border-radius:0;">
-		<div style="width: 100%;margin:0 auto;text-align: left;">
-			<div type="text" size="small">
+
+		<div style="width: 100%;margin:0 auto;text-align: left;" :model="formModule">
+			<el-div type="text" size="small">
 				代码：
-				<el-input style="width: 50px;" size="mini" placeholder="" />
-			</div>
-			<div type="text" size="small">
+				<el-input style="width: 100px;" size="mini" placeholder="" v-model="formModule.range"/>
+			</el-div>
+			<el-div type="text" size="small">
 				名称：
-				<el-input style="width: 50px;" size="mini" placeholder="" />
-			</div>
-			<div type="text" size="small">
+				<el-input style="width: 100px;" size="mini" placeholder="" v-model="formModule.status" placeholder="启用"/>
+			</el-div>
+			<el-div type="text" size="small">
 				状态：
 				<el-select v-model="value" placeholder="请选择" style="width: 100px;">
 					<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 					</el-option>
 				</el-select>
-			</div>
-			<el-input style="width: 150px;" 
-				size="mini" placeholder="输入关键字搜索" />
+			</el-div>
+
+			<el-input style="width: 150px;" size="mini" placeholder="输入关键字搜索" />
+
 		</div>
 		<div id="" style="text-align: right;">
+
 			<div>
 				<el-button type="text" size="small" @click="Add()">增加</el-button>
 				<!--增加内容的弹框-->
 				<el-dialog title="增加内容" :visible.sync="addDialog" center>
-					<el-form :inline="true" :model="studentForm" label-width="84px"  ref="studentForm" status-icon>
+					<el-form :inline="true" :model="studentForm" label-width="84px" ref="studentForm" status-icon>
 						<el-form-item label="序号">
 							<el-input v-model="studentForm.num"></el-input>
 						</el-form-item>
@@ -37,12 +40,15 @@
 						<el-form-item label="地址" prop="sex">
 							<el-input v-model="studentForm.address"></el-input>
 						</el-form-item>
+
+						</el-table-column>
 					</el-form>
 					<span slot="footer" class="dialog-footer">
             <el-button @click="addCancel('studentForm')">取 消</el-button>
             <el-button type="primary" @click="addSubmit('studentForm')">确 定</el-button>
           </span>
 				</el-dialog>
+
 			</div>
 
 		</div>
@@ -61,7 +67,7 @@
 			</el-table-column>
 		</el-table>
 		<el-dialog title="修改数据" :visible.sync="editFormVisible">
-			<el-form :model="editForm"  ref="editForm" label-width="100px" class="demo-ruleForm" inline>
+			<el-form :model="editForm" ref="editForm" label-width="100px" class="demo-ruleForm" inline>
 				<el-form-item label="id" prop="id">
 					<el-input v-model="editForm.id"></el-input>
 				</el-form-item>
@@ -74,15 +80,14 @@
 				<el-form-item label="时间" prop="type1">
 					<el-input v-model="editForm.date"></el-input>
 				</el-form-item>
-				
-				
+
 			</el-form>
 			<div slot="footer" class="dialog-footer">
 				<el-button @click="editCancel()">取 消</el-button>
 				<el-button type="primary" @click="editSubmit('editForm')">确 定</el-button>
 			</div>
 		</el-dialog>
-		<el-pagination style="text-align:right;"    :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400"></el-pagination>
+		<el-pagination style="text-align:right;" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400"></el-pagination>
 	</el-card>
 </template>
 <style>
@@ -107,7 +112,7 @@
 <script>
 	export default {
 		methods: {
-			// 修改表格某一行数据
+			// 修改表格某一行shuju
 			onEdit(index, row) {
 				this.editFormVisible = true;
 				this.editForm = row;
@@ -193,6 +198,11 @@
 					address: "",
 					date: "",
 
+				},
+				formModule: {
+					
+					range: "",
+					status: ""
 				},
 				formInline: {
 					user: "",
