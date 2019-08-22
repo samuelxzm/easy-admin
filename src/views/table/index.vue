@@ -202,6 +202,11 @@ export default {
       currentRow: ""
     };
   },
+  created(){
+this.getRequest('/api/table/select/all').then(result => {
+console.log(result)
+        });
+  },
   //方法
   methods: {
     onSubmit() {
