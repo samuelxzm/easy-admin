@@ -128,7 +128,7 @@
 </template>
 <script>
 import { constants } from "crypto";
-import {guid} from "@assets/js/common.js"
+import {guid} from "@/assets/js/common.js"
 export default {
   // 数据
   data() {
