@@ -110,23 +110,22 @@ import { SubmitForm, guid, DeleteStatus } from "@/assets/js/common.js";
 export default {
   // 数据
   data() {
-    //   var validateName = (rule, value, callback) => {
-    //   if(!!value) {
-    //    this.postRequest('/api/table/insert', {
-    //     code: value
-    //    }).then(result => {
-    //      console.log(result)
-    //     if(!result.data) {
-    //      callback()
-    //     } else {
-    //      callback(new Error('名字重复'))
-    //     }
-    //    })
-    //   } else {
-    //    callback(new Error('名字不能为空'))
-    //   }
+      var validateName = (rule, value, callback) => {
+      if(!!value) {
+       this.postRequest('/api/table/is/exist', {
+        name: value
+       }).then(result => {
+        if(result) {
+          callback(new Error('名字重复'))
+        } else {
+          callback()
+        }
+       })
+      } else {
+       callback(new Error('名字不能为空'))
+      }
 
-    //  }
+     }
     return {
       formInline: {
         name: "",
@@ -150,10 +149,10 @@ export default {
         ],
         idType: [{ required: true, message: "请输入id类型", trigger: "blur" }],
         // // 校验名字不能重复，主要通过validator来指定验证器名称
-        // name: [{ required: true, validator: validateName, trigger: 'blur' }],
-        name: [
-          { required: true, message: "请输入数据表名称", trigger: "blur" }
-        ],
+        name: [{ required: true, validator: validateName, trigger: 'blur' }],
+        // name: [
+        //   { required: true, message: "请输入数据表名称", trigger: "blur" }
+        // ],
         title: [
           { required: true, message: "请输入数据表含义", trigger: "blur" }
         ],
