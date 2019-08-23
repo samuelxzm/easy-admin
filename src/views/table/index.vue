@@ -8,8 +8,8 @@
       <el-form-item label="表含义">
         <el-input v-model="formInline.title" placeholder="表含义"></el-input>
       </el-form-item>
-      <el-form-item label="数据名称">
-        <el-input v-model="formInline.type" placeholder="数据名称"></el-input>
+      <el-form-item label="数据表类型">
+        <el-input v-model="formInline.type" placeholder="数据表类型"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" @click="onSubmit">查询</el-button>
@@ -48,21 +48,11 @@
         </template>
       </el-table-column>
     </el-table>
-    <!-- <el-pagination
-      style="text-align:right;"
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="currentPage"
-      :page-sizes="[100, 200, 300, 400]"
-      :page-size="100"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="400"
-    ></el-pagination>-->
     <!-- 编辑数据 -->
     <el-dialog title="数据表管理" :visible.sync="dialogAddVisible">
       <el-form :model="form" :rules="addRules" ref="form" :inline="true" size="small">
-        <el-form-item label="id" prop="id">
-          <el-input v-model="form.id" autocomplete="off"></el-input>
+        <el-form-item label="id" prop="id" class="id"> 
+          <el-input v-model="form.id" autocomplete="off" :disabled="true"></el-input>
         </el-form-item>
         <el-form-item label="项目id" prop="projectId" :label-width="formLabelWidth">
           <el-input v-model="form.projectId" autocomplete="off"></el-input>
@@ -70,10 +60,10 @@
         <el-form-item label="模块id" prop="moduleId" :label-width="formLabelWidth">
           <el-input v-model="form.moduleId" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="id类型" prop="idType" :label-width="formLabelWidth">
+        <el-form-item label="id类型" prop="idType" :label-width="formLabelWidth" class="type">
           <el-select v-model="form.idType" placeholder="请选择类型">
-            <el-option label="0" value="0"></el-option>
-            <el-option label="1" value="1"></el-option>
+            <el-option label="手动录入" value="手动录入"></el-option>
+            <el-option label="自动生成" value="自动生成"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="数据表名称" prop="name" :label-width="formLabelWidth">
@@ -91,10 +81,10 @@
         <el-form-item label="简介" prop="summary" :label-width="formLabelWidth">
           <el-input v-model="form.summary" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="状态" prop="status" :label-width="formLabelWidth">
+        <el-form-item label="状态" prop="status" :label-width="formLabelWidth" class="type">
           <el-select v-model="form.status" placeholder="请选择类型">
-            <el-option label="0" value="0"></el-option>
-            <el-option label="1" value="1"></el-option>
+            <el-option label="停用" value="0"></el-option>
+            <el-option label="启用" value="1"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="排序码" prop="sortNo" :label-width="formLabelWidth">
@@ -103,7 +93,7 @@
         <el-form-item label="记录创建人" prop="createUser" :label-width="formLabelWidth">
           <el-input v-model="form.createUser" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="备注" prop="remarks" :label-width="formLabelWidth">
+        <el-form-item label="备注" prop="remarks" :label-width="formLabelWidth" class="textarea">
           <el-input type="textarea" v-model="form.remarks" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
@@ -120,21 +110,37 @@ import { SubmitForm, guid, DeleteStatus } from "@/assets/js/common.js";
 export default {
   // 数据
   data() {
+    //   var validateName = (rule, value, callback) => {
+    //   if(!!value) {
+    //    this.postRequest('/api/table/insert', {
+    //     code: value
+    //    }).then(result => {
+    //      console.log(result)
+    //     if(!result.data) {
+    //      callback()
+    //     } else {
+    //      callback(new Error('名字重复'))
+    //     }
+    //    })
+    //   } else {
+    //    callback(new Error('名字不能为空'))
+    //   }
+
+    //  }
     return {
       formInline: {
-        "name":"",
-	      "title":"",
-	      "type":""
+        name: "",
+        title: "",
+        type: ""
       },
       tableData: [],
       dialogAddVisible: false, //控制添加数据框
-      dialogUpdateVisible: false,
       currentPage: 1,
       formLabelWidth: "120px",
       form: {},
       editType: "add",
       updateData: "",
-      //添加数据校验规则
+      //校验规则
       addRules: {
         projectId: [
           { required: true, message: "请输入项目id", trigger: "blur" }
@@ -143,8 +149,10 @@ export default {
           { required: true, message: "请输入模块id", trigger: "blur" }
         ],
         idType: [{ required: true, message: "请输入id类型", trigger: "blur" }],
+        // // 校验名字不能重复，主要通过validator来指定验证器名称
+        // name: [{ required: true, validator: validateName, trigger: 'blur' }],
         name: [
-          { required: true, message: "请输入数据表的物理名称", trigger: "blur" }
+          { required: true, message: "请输入数据表名称", trigger: "blur" }
         ],
         title: [
           { required: true, message: "请输入数据表含义", trigger: "blur" }
@@ -154,35 +162,14 @@ export default {
           { required: true, message: "请输入数据表类型", trigger: "blur" }
         ],
         summary: [{ required: true, message: "请输入简介", trigger: "blur" }],
-        remarks: [{ required: true, message: "请输入备注", trigger: "blur" }],
+        // remarks: [{ required: true, message: "请输入备注", trigger: "blur" }],
         sortNo: [{ required: true, message: "请输入排序码", trigger: "blur" }],
         status: [{ required: true, message: "请输入状态", trigger: "blur" }],
         createUser: [
           { required: true, message: "请输入记录创建人", trigger: "blur" }
         ]
       },
-      currentRow: "",
-      // 校验规则
-      addRules: {
-        name: [
-        { required: true, //是否必填
-          message: '表名不能重复', //规则
-          trigger: 'blur'  //何事件触发
-        }
-      ]
-      },
-      // var validateName = (rule, value, callback) => {
-      // if (!value) {
-      //   return callback(new Error('号码不能为空!!'))
-      // }
-      // setTimeout(() => {
-      //   if (!phoneReg.test(value)) {
-      //     callback(new Error('格式有误'))
-      //   } else {
-      //     callback()
-      //   }
-      // }, 1000)
-    // }
+      currentRow: ""
     };
   },
   created() {
@@ -193,18 +180,24 @@ export default {
     onSubmit() {
       var that = this;
       var data = that.formInline;
-      that.postRequest("/api/table/select/word",data).then(result => {
-        that.tableData =result.list;
+      that.postRequest("/api/table/select/word", data).then(result => {
+        that.tableData = result.list;
       });
     },
     // 获取数据
     getTableData() {
       this.getRequest("/api/table/select/all").then(result => {
         var tables = result.tables;
+        for (var i = 0; i < tables.length; i++) {
+          if (tables[i].status == 0) {
+            tables[i].status = "停用";
+          } else {
+            tables[i].status = "启用";
+          }
+        }
         this.tableData = tables;
       });
     },
-    // 根据id查询
 
     // 删除表格中的数据
     handleDelete(index, data) {
@@ -228,7 +221,7 @@ export default {
         delete this.form.createTime;
       } else {
         this.form = {
-          id:guid(),
+          id: guid(),
           projectId: "",
           moduleId: "",
           idType: "",
@@ -262,12 +255,12 @@ export default {
       );
     },
     // 取消
-    onCancle(){
+    onCancle() {
       var that = this;
       that.dialogAddVisible = false;
     },
     clickCurrent(e) {
-      console.log(e);
+      // console.log(e);
       // this.currentRow = e.number;
     },
     manageField() {
@@ -297,5 +290,15 @@ export default {
 .add_btn {
   float: right;
   margin-bottom: 10px;
+}
+.id .el-form-item__label{
+  width:120px;
+}
+.type .el-input__inner {
+  width:184px;
+}
+.textarea .el-textarea__inner{
+  width: 500px;
+  height: 100px;
 }
 </style>
