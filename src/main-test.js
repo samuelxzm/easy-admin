@@ -10,7 +10,7 @@ import store from '@/store'
 
 import axios from './assets/js/common.js' //引入axios
 import qs from 'qs'//引入QS包装data数据
-import {postRequest,getRequest} from './assets/js/common.js'
+import {getRequest,postRequest} from './assets/js/common.js'
 // import './assets/css/common.css'
 
 Vue.use(axios)

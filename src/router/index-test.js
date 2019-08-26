@@ -18,6 +18,11 @@ export const constantRoutes = [
     path: '/table',
     name: '表格',
     component: () => import('@/views/table/index.vue')
+  },
+  {
+    path: '/module',
+    name: '模块',
+    component: () => import('@/views/module/index.vue')
   }
 ]
 const createRouter = () => new Router({

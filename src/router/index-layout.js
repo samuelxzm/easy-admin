@@ -15,9 +15,19 @@ export const constantRoutes = [
     component: () => import('@/components/Layout'),
     children: [
       {
-        path: 'user',
-        name: '登陆',
-        component: () => import('@/views/table/index')
+        path: 'table',
+        name: '表格',
+        component: () => import('@/views/table/index.vue')
+      },
+      {
+        path: 'fieldmanage',
+        name: '索引管理',
+        component: () => import('@/views/table/fieldmanage.vue')
+      },
+      {
+        path: 'indexmanage',
+        name: '字段管理',
+        component: () => import('@/views/table/indexmanage.vue')
       }
     ]
   }

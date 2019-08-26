@@ -1,12 +1,18 @@
 <template>
   <div class="drawer-container">
     <div>
+      <h5 class="drawer-title">切换项目</h5>
+      <div class="drawer-item">
+        <el-select size="small" v-model="projectId" @change="projectChange">
+          <el-option v-for="item in projectList" :key="item.id" :label="item.name" :value="item.id"></el-option>
+        </el-select>
+      </div>
+
       <h5 class="drawer-title">系统布局配置</h5>
       <div class="drawer-item">
         <span>开启多页签</span>
         <el-switch v-model="tagsView" class="drawer-switch" />
       </div>
-
       <div class="drawer-item">
         <span>头部固定</span>
         <el-switch v-model="fixedHeader" class="drawer-switch" />
@@ -16,61 +22,69 @@
         <span>显示logo</span>
         <el-switch v-model="sidebarLogo" class="drawer-switch" />
       </div>
-
     </div>
   </div>
 </template>
 
 <script>
-
+import Cookies from "js-cookie";
 export default {
   data() {
-    return {}
+    return {
+      projectList: [],
+      projectId: ""
+    };
   },
   computed: {
     fixedHeader: {
       get() {
-        return this.$store.state.settings.fixedHeader
+        return this.$store.state.settings.fixedHeader;
       },
       set(val) {
-        this.$store.dispatch('settings/changeSetting', {
-          key: 'fixedHeader',
+        this.$store.dispatch("settings/changeSetting", {
+          key: "fixedHeader",
           value: val
-        })
+        });
       }
     },
     tagsView: {
       get() {
-        return this.$store.state.settings.tagsView
+        return this.$store.state.settings.tagsView;
       },
       set(val) {
-        this.$store.dispatch('settings/changeSetting', {
-          key: 'tagsView',
+        this.$store.dispatch("settings/changeSetting", {
+          key: "tagsView",
           value: val
-        })
+        });
       }
     },
     sidebarLogo: {
       get() {
-        return this.$store.state.settings.sidebarLogo
+        return this.$store.state.settings.sidebarLogo;
       },
       set(val) {
-        this.$store.dispatch('settings/changeSetting', {
-          key: 'sidebarLogo',
+        this.$store.dispatch("settings/changeSetting", {
+          key: "sidebarLogo",
           value: val
-        })
+        });
       }
     }
   },
+  created() {
+    let that = this;
+    this.getRequest("/api/projects/get/all").then(result => {
+      that.projectList = result.data;
+      if(!Cookies.get('projectId')){
+          Cookies.set("projectId", that.projectList[0].id);
+      }
+    });
+  },
   methods: {
-    // themeChange(val) {
-    //   this.$store.dispatch('settings/changeSetting', {
-    //     key: 'theme',
-    //     value: val
-    //   })
-    // }
+    projectChange(e) {
+      Cookies.set("projectId", e);
+    }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -79,24 +93,21 @@ export default {
   font-size: 14px;
   line-height: 1.5;
   word-wrap: break-word;
-
   .drawer-title {
     margin-top: 8px;
     margin-bottom: 12px;
-    color: rgba(0, 0, 0, .85);
+    color: rgba(0, 0, 0, 0.85);
     font-size: 14px;
     line-height: 22px;
   }
-
   .drawer-item {
-    color: rgba(0, 0, 0, .65);
+    color: rgba(0, 0, 0, 0.65);
     font-size: 14px;
     padding: 12px 0;
     width: 140px;
   }
-
   .drawer-switch {
-    float: right
+    float: right;
   }
 }
 </style>
