@@ -1,7 +1,7 @@
 <template>
   <div class="drawer-container">
     <div>
-      <h5 class="drawer-title">切换项目</h5>
+      <h5 class="drawer-title" style="margin-bottom:0;">切换项目</h5>
       <div class="drawer-item">
         <el-select size="small" v-model="projectId" @change="projectChange">
           <el-option v-for="item in projectList" :key="item.id" :label="item.name" :value="item.id"></el-option>
@@ -72,16 +72,22 @@ export default {
   },
   created() {
     let that = this;
-    this.getRequest("/api/projects/get/all").then(result => {
+    this.getRequest("/api/ts-user/projects/get/all").then(result => {
       that.projectList = result.data;
-      if(!Cookies.get('projectId')){
-          Cookies.set("projectId", that.projectList[0].id);
-      }
     });
+    this.getRequest("/api/ts-user/projects/get/default/project/id").then(
+      result => {
+        that.projectId = result;
+      }
+    );
   },
   methods: {
     projectChange(e) {
-      Cookies.set("projectId", e);
+      this.postRequest("/api/ts-user/projects/change", { id: e }).then(
+        result => {
+          location.reload();
+        }
+      );
     }
   }
 };

@@ -28,7 +28,6 @@ export default {
   },
   computed: {
     routers() {
-      console.log("a",global.antRouter)
       return global.antRouter;
     },
     ...mapState({

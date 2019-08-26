@@ -13,7 +13,7 @@
           @click.middle.native="closeSelectedTag(tag)"
           @click.prevent.native="openMenu(tag, $event)"
         >
-          {{ tag.title }}
+          {{ tag.name }}
           <span
             v-if="!tag.meta.affix"
             class="el-icon-close"
@@ -22,16 +22,16 @@
         </router-link>
       </div>
     </scroll-pane>
-    <div class="contextmenu">
+    <!-- <div class="contextmenu">
 
-      <!-- <li @click="refreshSelectedTag(selectedTag)">刷新</li>
+      <li @click="refreshSelectedTag(selectedTag)">刷新</li>
       <li
         v-if="!(selectedTag.meta && selectedTag.meta.affix)"
         @click="closeSelectedTag(selectedTag)"
       >关闭</li>
       <li @click="closeOthersTags">关闭其他</li>
-      <li @click="closeAllTags(selectedTag)">关闭全部</li>-->
-    </div>
+      <li @click="closeAllTags(selectedTag)">关闭全部</li>
+    </div> -->
   </div>
 </template>
 

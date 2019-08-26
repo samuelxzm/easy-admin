@@ -3,7 +3,6 @@ import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import axios from 'axios'
 const _import = require('../router/_import_' + process.env.NODE_ENV)//获取组件的方法
-console.log(process.env.NODE_ENV)
 import Layout from '@/components/Layout'
 import settings from '@/settings'
 let getRouter
@@ -54,7 +53,6 @@ else{
 }
 
 function saveObjArr(name, data) { //localStorage 存储数组对象的方法
-  console.log(data)
   localStorage.setItem(name, JSON.stringify(data))
 }
 
@@ -67,7 +65,6 @@ function routerGo(to, next) {
   router.addRoutes(getRouter) //动态添加路由
   router.options.routes = router.options.routes.concat(getRouter)
   global.antRouter = getRouter //将路由数据传递给全局变量，做侧边栏菜单渲染工作
-  console.log(global.antRouter)
   next({ ...to, replace: true })
 }
 function filterAsyncRouter(asyncRouterMap) { //遍历后台传来的路由字符串，转换为组件对象

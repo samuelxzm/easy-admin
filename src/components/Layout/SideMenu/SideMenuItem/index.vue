@@ -1,19 +1,19 @@
 <template>
-  <el-menu-item v-if="!router.children" :index="basePath">
+  <el-menu-item v-if="routerhaschildren.length==1" :index="basePath+'/'+routerhaschildren[0].path">
     <template>
-      <svg-icon :icon-class="router.meta.icon" />
-      <span slot="title">{{ router.meta.title }}</span>
+      <svg-icon :icon-class="router.iconCls" />
+      <span slot="title">{{ router.name }}</span>
     </template>
   </el-menu-item>
-  <side-menu-item
-    v-else-if="router.children.length == 1"
+  <!-- <side-menu-item
+    v-else-if="routerhaschildren.length == 1"
     :router="router.children[0]"
-    :base-path="router.path + '/' + router.children[0].path"
-  />
+    :base-path="router.path + '/' +routerhaschildren[0].path"
+  /> -->
   <el-submenu v-else :index="basePath + '/' + router.path">
     <template slot="title">
       <svg-icon :icon-class="router.meta.icon" />
-      <span v-if="router.meta.title">{{ router.meta.title }}</span>
+      <span v-if="router.name">{{ router.name }}</span>
     </template>
     <side-menu-item
       v-for="item in router.children"
@@ -31,6 +31,11 @@ export default {
     basePath: {
       type: String,
       default: ""
+    }
+  },
+  computed:{
+    routerhaschildren(){
+      return this.router.children.filter(item => item.type!='hidden' )
     }
   },
   created() {}
