@@ -21,28 +21,24 @@ axios.interceptors.request.use(config => {
 // 拦截响应response，并做一些错误处理
 axios.interceptors.response.use((response) => {
     const data = response.data;
-    // 根据返回的code值来做不同的处理（和后端约定）
-    //     data.code=parseInt(data.code)
-    //     if(data.code==0){
-    //         return data.data
+    //根据返回的code值来做不同的处理（和后端约定）
+    data.code = parseInt(data.code)
+    if (data.code == 0) {
+        return data.data
+    }
+    // else if(data.code==-200){
+    //     if (window.location.pathname == '/login' | '/') {
     //     }
-    //     // else if(data.code==-200){
-    //     //     if (window.location.pathname == '/login' | '/') {
-    //     //     }
-    //     //     else {
-    //     //         location.replace(`/login`)
-    //     //     }
-    //     // }
-    //     else if(data.code==-600){
-    //             location.replace(`/maintenance`)
+    //     else {
+    //         location.replace(`/login`)
     //     }
-    //     else if(data.code==-205){
-    //         // todo
-    //     }
-    //     else{
-  
-    return data
-    //     }
+    // }
+    else if (data.code == -600) {
+        location.replace(`/maintenance`)
+    }
+    else if (data.code == -205) {
+        // todo
+    }
 }, (err) => { // 这里是返回状态码不为200时候的错误处理
     if (err && err.response) {
         switch (err.response.status) {
@@ -250,7 +246,7 @@ function DeleteStatus(vim, deleteUrl, data, callback) {
         callback: function (action) {
             if (action == "confirm") {
                 //调用删除接口删除
-                that.postRequest(deleteUrl,data).then(isdelete => {
+                that.postRequest(deleteUrl, data).then(isdelete => {
                     if (isdelete) {
                         that.$message({
                             message: '删除成功！',

@@ -22,4 +22,11 @@ html,body{
 #app{
   height: 100%;
 }
+body .el-table th.gutter{
+    display: table-cell!important;
+}
+ 
+body .el-table colgroup.gutter{
+    display: table-cell!important;
+}
 </style>
