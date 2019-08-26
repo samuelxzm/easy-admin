@@ -2,10 +2,10 @@
   <div class="login">
     <el-form size="medium" ref="form" :model="form" label-width="40px">
       <el-form-item label="账号">
-        <el-input clearable v-model="form.name"></el-input>
+        <el-input clearable v-model="form.userName"></el-input>
       </el-form-item>
       <el-form-item label="密码">
-        <el-input clearable type="password" v-model="form.password"></el-input>
+        <el-input clearable type="password" v-model="form.passWord"></el-input>
       </el-form-item>
       <el-form-item>
         <el-checkbox v-model="remember">7天内记住密码</el-checkbox>
@@ -22,8 +22,8 @@ export default {
   data() {
     return {
       form: {
-        name: "",
-        password: ""
+        userName: "",
+        passWord: ""
       },
       remember: true
     };
@@ -32,20 +32,25 @@ export default {
     let name = Cookies.get("name");
     let password = Cookies.get("password");
     if (!!name && !!password) {
-      this.form.name = name;
-      this.form.password = password;
+      this.form.userName = name;
+      this.form.passWord = password;
     }
   },
   methods: {
     onSubmit() {
-      if (this.remember) {
-        Cookies.set("name", this.form.name, { expires: 7 });
-        Cookies.set("password", this.form.password, { expires: 7 });
-      } else {
-        Cookies.remove("name");
-        Cookies.remove("password");
-      }
-      this.$router.push({path:'/dashboard'})
+               Cookies.set("token", "123456");
+//       if (this.remember) {
+//         Cookies.set("name", this.form.userName, { expires: 7 });
+//         Cookies.set("password", this.form.passWord, { expires: 7 });
+//       } else {
+//         Cookies.remove("name");
+//         Cookies.remove("password");
+//       }
+
+//       this.postRequest('/api/login',this.form).then(result=>{
+// console.log(result)
+//       })
+      // this.$router.push({path:'/dashboard'})
     }
   }
 };
