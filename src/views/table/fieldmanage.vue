@@ -10,7 +10,7 @@
     </div>
     <!-- 数据表表格 -->
     <el-table border :data="tableData" highlight-current-row @current-change="clickCurrent">
-      <el-table-column type="index" width="50" label="序号"></el-table-column>
+      <el-table-column type="index" align="center" width="50" label="序号"></el-table-column>
       <el-table-column prop="name" label="名称"></el-table-column>
       <el-table-column prop="summary" label="字段含义"></el-table-column>
       <el-table-column prop="dataType" label="字段类型"></el-table-column>
@@ -18,13 +18,12 @@
       <el-table-column prop="extendLength" label="小数位数"></el-table-column>
       <el-table-column prop="defaultValue" label="默认值"></el-table-column>
 
-      <el-table-column prop="status" label="状态">
+      <el-table-column prop="status" align="center" label="状态">
         <template slot-scope="scope">
           <span v-if="scope.row.status==1">启用</span>
           <span v-else>停用</span>
         </template>
       </el-table-column>
-      <el-table-column prop="createUser" label="创建人"></el-table-column>
       <el-table-column prop="remarks" label="备注"></el-table-column>
       <!-- <el-table-column prop="creatTime" label="记录创建时间"></el-table-column> -->
       <el-table-column label="操作" width="140" align="center">
@@ -125,8 +124,8 @@
                 ></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="创建人" prop="createUser">
-              <el-input v-model="editForm.createUser" autocomplete="off"></el-input>
+            <el-form-item label="排序码" prop="sortNo">
+              <el-input v-model.number="editForm.sortNo" autocomplete="off"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -202,7 +201,11 @@ export default {
         ],
         summary: [
           { required: true, message: "请输入字段含义", trigger: "blur" }
-        ]
+        ],
+        sortNo: [
+          { required: true, message: "请输入排序码", trigger: "blur" },
+          {type:"number",message:"排序码必须为数字",trigger:"blur"}
+        ],
       }
     };
   },
@@ -262,9 +265,9 @@ export default {
       if (type == "edit") {
         this.editForm = Object.assign({}, data);
         delete this.editForm.createTime;
+        delete this.editForm.dataTypeName;
       } else {
         this.editForm = {
-          createUser: "",
           dataLength: 0,
           dataType: "",
           defaultValue: "",
@@ -274,6 +277,7 @@ export default {
           parentId: this.tableId,
           remarks: "",
           status: "1",
+          sortNo:100,
           summary: ""
         };
       }

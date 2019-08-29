@@ -1,7 +1,5 @@
 <template>
-  <el-card
-    style="min-height:100%;box-sizing:border-box;border-radius:0;"
-  >
+  <el-card style="min-height:100%;box-sizing:border-box;border-radius:0;">
     <!-- 数据表搜索 -->
     <el-form :inline="true" :model="formInline" size="small">
       <el-form-item label="表名">
@@ -31,17 +29,15 @@
       highlight-current-row
       @current-change="clickCurrent"
     >
-      <el-table-column type="index" width="50" label="序号"></el-table-column>
+      <el-table-column type="index" align="center" width="50" label="序号"></el-table-column>
       <el-table-column prop="moduleName" label="模块" width="100"></el-table-column>
       <el-table-column prop="idType" label="id类型"></el-table-column>
       <el-table-column prop="name" label="数据表名称"></el-table-column>
       <el-table-column prop="title" label="数据表含义"></el-table-column>
       <el-table-column prop="shortName" label="简称"></el-table-column>
-      <el-table-column prop="type" label="类型"></el-table-column>
+      <el-table-column prop="typeName" label="类型"></el-table-column>
       <el-table-column prop="summary" label="简介"></el-table-column>
-
-      <el-table-column prop="status" label="状态"></el-table-column>
-      <el-table-column prop="createUser" label="创建人"></el-table-column>
+      <el-table-column prop="status" align="center" label="状态"></el-table-column>
       <el-table-column prop="remarks" label="备注"></el-table-column>
       <el-table-column label="操作" width="140" align="center">
         <template slot-scope="scope">
@@ -84,13 +80,21 @@
             </el-form-item>
 
             <el-form-item label="数据表类型" prop="type">
-              <el-input v-model="form.type" autocomplete="off"></el-input>
+              <el-select v-model="form.type" placeholder="请选择类型">
+                <el-option
+                  v-for="item in typeOptions"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.code"
+                ></el-option>
+                <el-option label="自动生成" value="自动生成"></el-option>
+              </el-select>
             </el-form-item>
             <el-form-item label="数据表含义" prop="title">
               <el-input v-model="form.title" autocomplete="off"></el-input>
             </el-form-item>
-            <el-form-item label="创建人" prop="createUser">
-              <el-input v-model="form.createUser" autocomplete="off"></el-input>
+            <el-form-item label="排序码" prop="sortNo">
+              <el-input v-model.number="form.sortNo"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -134,7 +138,7 @@ export default {
   data() {
     var validateName = (rule, value, callback) => {
       if (this.editType == "add") {
-        var reg = /^[a-zA-Z]+$/;
+        var reg = /^([a-zA-Z]*_*[a-zA-Z]*)*$/;
         if (!!value) {
           if (reg.test(value)) {
             this.postRequest("/api/" + this.serviceName + "/table/is/exist", {
@@ -147,18 +151,18 @@ export default {
               }
             });
           } else {
-            callback(new Error("请输入英文"));
+            callback(new Error("请输入正确的表名称"));
           }
         } else {
           callback(new Error("数据表名称不能为空"));
         }
-      }
-      else{
-           callback();
+      } else {
+        callback();
       }
     };
     return {
       options: [],
+      typeOptions: [],
       loading: "",
       serviceName: "",
       formInline: {
@@ -187,7 +191,11 @@ export default {
         type: [
           { required: true, message: "请输入数据表类型", trigger: "blur" }
         ],
-        summary: [{ required: true, message: "请输入简介", trigger: "blur" }]
+        summary: [{ required: true, message: "请输入简介", trigger: "blur" }],
+        sortNo: [
+          { required: true, message: "请输入排序码", trigger: "blur" },
+          {  type: "number", message: "排序码必须为数字", trigger: "blur"}
+        ]
       },
       currentRow: ""
     };
@@ -197,6 +205,7 @@ export default {
     this.serviceName = this.$router.currentRoute.meta.serviceName;
     this.getTableData();
     this.getMoudle();
+    this.getType();
   },
   //方法
   methods: {
@@ -206,7 +215,6 @@ export default {
       that
         .postRequest("/api/" + this.serviceName + "/table/select/word", data)
         .then(result => {
-          
           that.tableData = result.list;
         });
     },
@@ -225,6 +233,15 @@ export default {
         .postRequest("/api/" + this.serviceName + "/module/find/by/project/id")
         .then(result => {
           this.options = result;
+        });
+    },
+    // 获取表的类型
+    getType() {
+      var that = this;
+      that
+        .postRequest("/api/" + this.serviceName + "/table/type/select/all")
+        .then(result => {
+          this.typeOptions = result;
         });
     },
     // 获取数据
@@ -269,6 +286,7 @@ export default {
         this.form = Object.assign({}, data);
         delete this.form.createTime;
         delete this.form.moduleName;
+        delete this.form.typeName;
       } else {
         this.form = {
           id: guid(),
@@ -282,7 +300,7 @@ export default {
           summary: "",
           remarks: "",
           status: "1",
-          createUser: ""
+          sortNo:100
         };
       }
       this.dialogAddVisible = true;
@@ -310,10 +328,9 @@ export default {
       that.dialogAddVisible = false;
     },
     clickCurrent(e) {
-   if(!!e.id){
-   this.currentRow = e.id;
-   }
-   
+      if (!!e.id) {
+        this.currentRow = e.id;
+      }
     },
     manageField() {
       if (!this.currentRow) {

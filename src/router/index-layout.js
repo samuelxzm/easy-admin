@@ -17,16 +17,19 @@ export const constantRoutes = [
       {
         path: 'table',
         name: '表格',
+        meta:{serviceName:"ts-table"},
         component: () => import('@/views/table/index.vue')
       },
       {
         path: 'fieldmanage',
         name: '索引管理',
+        meta:{serviceName:"ts-table"},
         component: () => import('@/views/table/fieldmanage.vue')
       },
       {
         path: 'indexmanage',
         name: '字段管理',
+        meta:{serviceName:"ts-table"},
         component: () => import('@/views/table/indexmanage.vue')
       }
     ]
