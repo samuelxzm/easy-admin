@@ -92,6 +92,7 @@
 <script>
 import { SubmitForm, guid, DeleteStatus } from "@/assets/js/common.js";
 export default {
+    name:'菜单管理',
   data() {
     return {
       serviceName: "",

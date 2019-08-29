@@ -131,6 +131,7 @@
 <script>
 import { SubmitForm, guid, DeleteStatus } from "@/assets/js/common.js";
 export default {
+  name:'projectDeloyment',
   data() {
     // 端口号校验
     let checkPort = (rule, value, callback) => {

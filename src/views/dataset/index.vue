@@ -13,7 +13,7 @@
       @current-change="clickCurrent"
        v-loading="loading"
     >
-      <el-table-column type="index" width="50" label="序号"></el-table-column>
+      <el-table-column type="index" width="50" label="序号" align="center"></el-table-column>
       <el-table-column prop="name" label="名称"></el-table-column>
       <el-table-column prop="moduleId" label="模块"></el-table-column>
       <el-table-column prop="sortNo" label="排序"></el-table-column>
@@ -41,7 +41,7 @@
     </el-table>
     <!-- 编辑数据 -->
     <el-dialog :visible.sync="editDialogVisible" title="数据集管理" :close-on-click-modal="false">
-      <el-tabs v-model="activeName" type="card">
+      <el-tabs v-model="activeName">
         <!-- 基本信息 -->
         <el-tab-pane label="基本信息" name="first">
           <el-form :model="form" ref="form" :rules="editRules" size="small" label-width="130px">
@@ -69,22 +69,20 @@
                   <el-input v-model="form.sortNo" autocomplete="off"></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="12">
+              <el-col :span="24">
                 <el-form-item label="select子句" prop="sqlSelect">
                   <el-input v-model="form.sqlSelect" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="from的sql语句" prop="sqlFrom">
                   <el-input v-model="form.sqlFrom" autocomplete="off"></el-input>
                 </el-form-item>
-              </el-col>
-              <el-col :span="12">
                 <el-form-item label="默认where条件" prop="sqlWhereDefault">
                   <el-input v-model="form.sqlWhereDefault" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="默认排序语句" prop="sqlOrderBy">
                   <el-input v-model="form.sqlOrderBy" autocomplete="off"></el-input>
                 </el-form-item>
-              </el-col>
+                </el-col>
               <el-col :span="12">
                 <el-form-item label="数据库分组" prop="sqlGroupBy">
                   <el-input v-model="form.sqlGroupBy" autocomplete="off"></el-input>
@@ -128,9 +126,10 @@
             <el-button size="small" type="primary" @click="editCondition('add')">增加</el-button>
           </div>
           <el-table :data="conditionData" border>
+            <el-table-column type="index" width="50" label="序号" align="center"></el-table-column>
             <el-table-column property="fieldName" label="字段名" width="80"></el-table-column>
             <el-table-column property="conditionType" label="条件类型" width="80"></el-table-column>
-            <el-table-column property="sql" label="sql语句"></el-table-column>
+            <el-table-column property="sql" label="sql语句" width="120"></el-table-column>
             <el-table-column property="description" label="说明"></el-table-column>
             <el-table-column label="操作" width="140" align="center">
               <template slot-scope="scope">
@@ -161,9 +160,11 @@
             <el-button size="small" type="primary" @click="addCreateTableField('add')">新增字段</el-button>
           </div>
           <el-table :data="colomData" border>
+            <el-table-column type="index" width="50" label="序号" align="center"></el-table-column>
             <el-table-column property="alias" label="别名" width="80"></el-table-column>
-            <el-table-column property="sql" label="sql语句"></el-table-column>
-            <el-table-column property="description" label="说明"></el-table-column>
+            <el-table-column property="fildName" label="字段名" width="100"></el-table-column>
+            <el-table-column property="sql" label="sql语句" width="120"></el-table-column>
+            <el-table-column property="description"  label="说明"></el-table-column>
             <el-table-column label="操作" width="140" align="center">
               <template slot-scope="scope">
                 <el-button
@@ -321,39 +322,18 @@ export default {
       //校验规则
       editRules: {
         name: [{ required: true, message: "请输入名称", trigger: "blur" }],
-        moduleId: [
-          { required: true, message: "请输入所属模块", trigger: "blur" }
-        ],
-        relationTable: [{ required: true, message: "相关表", trigger: "blur" }],
-        // // 校验名字不能重复，主要通过validator来指定验证器名称
+        // moduleId: [
+        //   { required: true, message: "请输入所属模块", trigger: "blur" }
+        // ],
+        relationTable: [{ required: true, message: "请输入相关表", trigger: "blur" }],
+        // 校验名字不能重复，主要通过validator来指定验证器名称
         sortNo: [{ required: true, validator: validateName, trigger: "blur" }],
-        sqlSelect: [
-          { required: true, message: "请输入select子句", trigger: "blur" }
-        ],
-        sqlFrom: [
-          { required: true, message: "请输入from的sql语句", trigger: "blur" }
-        ],
-        sqlWhereDefault: [
-          { required: true, message: "请输入默认where条件", trigger: "blur" }
-        ],
-        sqlOrderBy: [
-          { required: true, message: "请输入默认排序语句", trigger: "blur" }
-        ],
-        sqlGroupBy: [
-          { required: true, message: "请输入数据库分组", trigger: "blur" }
-        ],
-        sqlHaving: [
-          { required: true, message: "请输入分组having子句", trigger: "blur" }
-        ],
-        needTotalRow: [
-          { required: true, message: "请选择是否需要总条数", trigger: "blur" }
-        ],
-        status: [{ required: true, message: "请选择状态", trigger: "blur" }]
+        sqlSelect: [{ required: true, message: "请输入select子句", trigger: "blur" }],
+        sqlFrom: [{ required: true, message: "请输入from的sql语句", trigger: "blur"  }]
       },
       addNameRules: {
         alias: [{ required: true, message: "请输入别名", trigger: "blur" }],
-        sql: [{ required: true, message: "请输入sql语句", trigger: "blur" }],
-        description: [{ required: true, message: "说明", trigger: "blur" }]
+        sql: [{ required: true, message: "请输入sql语句", trigger: "blur" }]
       },
       conditionRules: {
         fieldName: [
@@ -491,16 +471,16 @@ export default {
       if (type == "edit") {
         this.form = Object.assign({}, data);
         delete this.form.createTime;
+        this.getData();
         this.getIdConlomData();
         this.getIdConditionData();
-        console.log(data)
       } else {
         this.form = {
           id:guid(),
           name: "",
           moduleId: "",
           relationTable: "",
-          sortNo: "",
+          sortNo: "100",
           sqlSelect: "",
           sqlFrom: "",
           sqlWhereDefault: "",
@@ -512,6 +492,7 @@ export default {
           description: "",
           remarks: ""
         };
+        this.getData();
         this.getIdConlomData();
         this.getIdConditionData();
 
@@ -620,7 +601,7 @@ export default {
         this.dialogAddVisibleName = true;
       }else{
         this.$message({
-            message: "暂无相关表"
+            message: "无相关表,请录入相关表"
           });
       }
     },
@@ -688,5 +669,8 @@ export default {
 }
 .btn {
   float: right;
+}
+.el-dialog__body{
+  padding-top: 0 !important;
 }
 </style>

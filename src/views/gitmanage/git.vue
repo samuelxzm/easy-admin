@@ -41,8 +41,6 @@
 							<el-input v-model="studentForm.url"></el-input>
 						</el-form-item>
 					</el-col>
-			
-				
 					<el-col :span="12">
 						<el-form-item label="git用户名" prop="userName">
 							<el-input v-model="studentForm.userName"></el-input>

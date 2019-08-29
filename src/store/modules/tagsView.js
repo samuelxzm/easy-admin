@@ -13,9 +13,10 @@ const mutations = {
     )
   },
   ADD_CACHED_VIEW: (state, view) => {
-    if (state.cachedViews.includes(view.name)) return
+    let name=view.path.replace(/\//g,'')
+    if (state.cachedViews.includes(name)) return
     if (!view.meta.noCache) {
-      state.cachedViews.push(view.name)
+      state.cachedViews.push(name)
     }
   },
 
@@ -28,15 +29,10 @@ const mutations = {
     }
   },
   DEL_CACHED_VIEW: (state, view) => {
-
     for (const i of state.cachedViews) {
-
-      if (i === view.name) {
-        console.log(i)
-        console.log(state.cachedViews)
+      if (i === view.path.replace(/\//g,'')) {
         const index = state.cachedViews.indexOf(i)
         state.cachedViews.splice(index, 1)
-
         break
       }
     }

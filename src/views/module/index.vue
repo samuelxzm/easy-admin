@@ -71,6 +71,7 @@
 <script>
 import { SubmitForm, guid, DeleteStatus } from "@/assets/js/common.js";
 export default {
+  name:"moduleindex",
   data() {
     // 模块名称校验
     var validateName = (rule, value, callback) => {

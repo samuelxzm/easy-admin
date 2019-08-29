@@ -15,7 +15,7 @@
       <svg-icon icon-class="refresh" />
     </el-button>
     <el-button v-if="defaultSetting.fullScreen" size="medium" type="text" @click="screenFull()">
-      <svg-icon :icon-class="isFullscreen ? 'fullScreen' : 'fullScreen'" />
+      <svg-icon :icon-class="isFullscreen ? 'unfullScreen' : 'fullScreen'" />
     </el-button>
     <el-button v-if="defaultSetting.openAlone" size="medium" type="text" @click="openAlone()">
       <svg-icon icon-class="show" />
@@ -136,15 +136,16 @@ export default {
     reFresh() {
       let that = this;
       let view = this.$router.currentRoute;
-      this.$store.dispatch("tagsView/delCachedView", view).then(() => {
-        const { fullPath } = view;
-        this.$router.replace({
-          path: fullPath,
-          query: {
-            t: Date.now()
-          }
-        });
-      });
+
+
+            this.$store.dispatch('tagsView/delCachedView', view).then(() => {
+        const { fullPath } = view
+        this.$nextTick(() => {
+          this.$router.replace({
+            path: '/redirect' + fullPath
+          })
+        })
+      })
     },
     closeOthersTags() {
       let view = this.$router.currentRoute;

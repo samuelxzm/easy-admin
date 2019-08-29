@@ -87,6 +87,7 @@
 //	import { guid } from "@/assets/js/common.js";
 import { SubmitForm, guid, DeleteStatus } from "@/assets/js/common.js";
 export default {
+  name:"userindex",
   // 获取数据
   data() {
     var validateCode = (rule, value, callback) => {
