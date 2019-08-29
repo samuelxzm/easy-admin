@@ -30,7 +30,7 @@
       v-if="defaultSetting.showSettings"
       size="medium"
       style="margin-left:15px;align-items: center;display: flex;"
-      :hide-on-click='false'
+      :hide-on-click="false"
     >
       <el-button
         style="color:#4b4b4b;font-size: 20px;"
@@ -73,7 +73,6 @@ import settings from "@/settings.js";
 import settingPlane from "../../RightPanel/Settings/index";
 export default {
   components: {
-
     settingPlane
   },
   data() {
@@ -119,34 +118,50 @@ export default {
         screenfull.off("change", this.change);
       }
     },
-    reFresh(){
-      let view=this.$router.currentRoute
-            this.$store.dispatch('tagsView/delCachedView',view).then(() => {
-        const { fullPath } = view
-  
-        this.$nextTick(() => {
-          this.$router.replace({
-            path: fullPath
-          })
-        })
-      })
+    reloadRouter(path) {
+      this.$router.push({
+        name: "redirect",
+        params: {
+          path: path
+        }
+      });
+
+      this.$router.push({
+        path: "redirect",
+        query: {
+          path: path
+        }
+      });
     },
-        closeOthersTags() {
-            let view=this.$router.currentRoute
-      this.$router.push(view)
-      this.$store.dispatch('tagsView/delOthersViews', view).then(() => {
+    reFresh() {
+      let that = this;
+      let view = this.$router.currentRoute;
+      this.$store.dispatch("tagsView/delCachedView", view).then(() => {
+        const { fullPath } = view;
+        this.$router.replace({
+          path: fullPath,
+          query: {
+            t: Date.now()
+          }
+        });
+      });
+    },
+    closeOthersTags() {
+      let view = this.$router.currentRoute;
+      this.$router.push(view);
+      this.$store.dispatch("tagsView/delOthersViews", view).then(() => {
         // this.moveToCurrentTag()
-      })
+      });
     },
     closeAllTags() {
-       let view=this.$router.currentRoute
-      this.$store.dispatch('tagsView/delAllViews').then(({ visitedViews }) => {
+      let view = this.$router.currentRoute;
+      this.$store.dispatch("tagsView/delAllViews").then(({ visitedViews }) => {
         if (this.affixTags.some(tag => tag.path === view.path)) {
-          return
+          return;
         }
         // this.toLastView(visitedViews, view)
-      })
-    },
+      });
+    }
   }
 };
 </script>

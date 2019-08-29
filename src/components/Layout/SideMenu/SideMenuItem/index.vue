@@ -1,8 +1,8 @@
 <template>
   <el-menu-item v-if="routerhaschildren.length==1" :index="basePath+'/'+routerhaschildren[0].path">
     <template>
-      <svg-icon :icon-class="router.iconCls" />
-      <span slot="title">{{ router.name }}</span>
+      <svg-icon :icon-class="routerhaschildren[0].iconCls" />
+      <span slot="title">{{ routerhaschildren[0].name }}</span>
     </template>
   </el-menu-item>
   <!-- <side-menu-item
@@ -12,15 +12,22 @@
   /> -->
   <el-submenu v-else :index="basePath + '/' + router.path">
     <template slot="title">
-      <svg-icon :icon-class="router.meta.icon" />
+      <svg-icon :icon-class="router.iconCls" />
       <span v-if="router.name">{{ router.name }}</span>
     </template>
-    <side-menu-item
+    <!-- <side-menu-item
       v-for="item in router.children"
       :key="item.path"
       :router="item"
       :base-path="basePath + '/' + item.path"
-    />
+    /> -->
+      <el-menu-item v-for="item in router.children" :key="item.id" :index="basePath+'/'+item.path">
+    <template>
+      <svg-icon :icon-class="item.iconCls" />
+      <span slot="title">{{ item.name }}</span>
+    </template>
+  </el-menu-item>
+
   </el-submenu>
 </template>
 <script>

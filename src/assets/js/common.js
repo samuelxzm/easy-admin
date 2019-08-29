@@ -22,8 +22,7 @@ axios.interceptors.request.use(config => {
 axios.interceptors.response.use((response) => {
     const data = response.data;
     //根据返回的code值来做不同的处理（和后端约定）
-    data.code = parseInt(data.code)
-    if (data.code == 0) {
+    if (data.code == 0||data.code == -1) {
         return data.data
     }
     // else if(data.code==-200){
@@ -144,6 +143,7 @@ export const getRequest = (url, params) => {
 function SubmitForm(vim, formName, formDataKey, type, addUrl, editUrl, callback) {
     let that = vim;
     var data = Object.assign({}, that[formDataKey])
+    console.log(that.$refs[formName])
     that.$refs[formName].validate(function (valid) {
         if (valid) {
             if (type == "add") {

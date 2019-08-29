@@ -136,6 +136,7 @@ export default {
 
     closeSelectedTag() {
       let view=this.selectedTag
+      console.log(view)
       this.$store
         .dispatch("tagsView/delView", view)
         .then(({ visitedViews }) => {

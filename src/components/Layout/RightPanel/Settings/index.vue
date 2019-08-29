@@ -73,7 +73,7 @@ export default {
   created() {
     let that = this;
     this.getRequest("/api/ts-user/projects/get/all").then(result => {
-      that.projectList = result.data;
+      that.projectList = result;
     });
     this.getRequest("/api/ts-user/projects/get/default/project/id").then(
       result => {
