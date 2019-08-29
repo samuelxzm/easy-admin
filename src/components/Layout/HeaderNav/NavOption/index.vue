@@ -60,7 +60,7 @@
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item icon="el-icon-s-custom">个人中心</el-dropdown-item>
         <el-dropdown-item icon="el-icon-key">修改密码</el-dropdown-item>
-        <el-dropdown-item divided icon="el-icon-switch-button">退出登录</el-dropdown-item>
+        <el-dropdown-item divided icon="el-icon-switch-button" @click.native="loginOut">退出登录</el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
   </div>
@@ -162,6 +162,12 @@ export default {
         }
         // this.toLastView(visitedViews, view)
       });
+    },
+    loginOut(){
+      let that=this
+    this.getRequest('/api/ts-verity/login/loginOut').then(result=>{
+that.$router.push('/login')
+    })
     }
   }
 };

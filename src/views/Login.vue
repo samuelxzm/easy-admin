@@ -2,7 +2,7 @@
   <div class="login">
     <el-form size="medium" ref="form" :model="form" label-width="40px">
       <el-form-item label="账号">
-        <el-input clearable v-model="form.name"></el-input>
+        <el-input clearable v-model="form.username"></el-input>
       </el-form-item>
       <el-form-item label="密码">
         <el-input clearable type="password" v-model="form.password"></el-input>
@@ -22,7 +22,7 @@ export default {
   data() {
     return {
       form: {
-        name: "",
+        username: "",
         password: ""
       },
       remember: true
@@ -32,20 +32,36 @@ export default {
     let name = Cookies.get("name");
     let password = Cookies.get("password");
     if (!!name && !!password) {
-      this.form.name = name;
+      this.form.username = name;
       this.form.password = password;
     }
   },
   methods: {
     onSubmit() {
+      let that = this;
       if (this.remember) {
-        Cookies.set("name", this.form.name, { expires: 7 });
+        Cookies.set("name", this.form.username, { expires: 7 });
         Cookies.set("password", this.form.password, { expires: 7 });
       } else {
         Cookies.remove("name");
         Cookies.remove("password");
       }
-      this.$router.push({path:'/dashboard'})
+      this.postRequest(
+        "/api/ts-verity/login/login?username=" +
+          this.form.username +
+          "&password=" +
+          this.form.password,
+        {},
+        "application/x-www-form-urlencoded"
+      ).then(result => {
+        if (result) {
+          that.$router.push("/table/index");
+        } else {
+          that.$message.error({
+            message: "用户名或密码错误"
+          });
+        }
+      });
     }
   }
 };

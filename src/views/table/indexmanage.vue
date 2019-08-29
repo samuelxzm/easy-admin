@@ -32,7 +32,7 @@
         </template>
       </el-table-column>
       <!-- <el-table-column prop="status" label="状态"></el-table-column> -->
-      <el-table-column prop="createUser" label="创建人" width="210"></el-table-column>
+    
       <!-- <el-table-column prop="creatTime" label="记录创建时间"></el-table-column> -->
       <el-table-column label="操作" width="70" align="center">
         <template slot-scope="scope">
@@ -67,8 +67,8 @@
               <el-radio v-model="editForm.isClustered" label="1">是</el-radio>
               <el-radio v-model="editForm.isClustered" label="0">否</el-radio>
             </el-form-item>
-            <el-form-item label="创建人" prop="createUser">
-              <el-input v-model="editForm.createUser" autocomplete="off"></el-input>
+            <el-form-item label="排序码" prop="sortNo">
+              <el-input v-model.number="editForm.sortNo" autocomplete="off"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -111,7 +111,11 @@ export default {
       standardDialogVisible: false,
       editType: "add",
       editForm: {},
-      editRules: {      
+      editRules: { 
+                sortNo: [
+          { required: true, message: "请输入排序码", trigger: "blur" },
+          {type:"number",message:"排序码必须为数字",trigger:"blur"}
+        ] 
       }
     };
   },
@@ -156,11 +160,11 @@ export default {
         delete this.editForm.createTime;
       } else {
         this.editForm = {
-          createUser: "",
           id: guid(),
           parentId: this.tableId,
           isClustered: "1",
-          isUnique: "1"
+          isUnique: "1",
+          sortNo:100
         };
       }
       this.editDialogVisible = true;

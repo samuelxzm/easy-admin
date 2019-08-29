@@ -104,13 +104,13 @@ axios.install = (Vue) => {
  */
 
 
-export const postRequest = (url, data) => {
+export const postRequest = (url, data,header) => {
     return axios({
         method: 'post',
         url: `${url}`,
         data: data,
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': !!header?header:'application/json'
         }
     });
 }
@@ -143,7 +143,6 @@ export const getRequest = (url, params) => {
 function SubmitForm(vim, formName, formDataKey, type, addUrl, editUrl, callback) {
     let that = vim;
     var data = Object.assign({}, that[formDataKey])
-    console.log(that.$refs[formName])
     that.$refs[formName].validate(function (valid) {
         if (valid) {
             if (type == "add") {

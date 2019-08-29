@@ -17,12 +17,6 @@
 					<span v-else>停用</span>
 				</template>
 			</el-table-column>
-			<!--<el-table-column prop="status" label="操作" width="80">
-        <template slot-scope="scope">
-          <span v-if="scope.row.status==1">编辑</span>
-          <span v-else>删除</span>
-        </template>
-      </el-table-column>-->
 			<el-table-column label="操作" width="140" align="center">
 				<template slot-scope="scope">
 					<el-button circle plain type="primary" size="small" @click="addSubmit('edit',scope.row)" icon="el-icon-edit"></el-button>
@@ -185,17 +179,6 @@
 						that.addDialog = false;
 					}
 				);
-			},
-			tableRowClassName({
-				row,
-				rowIndex
-			}) {
-				if(rowIndex === 1) {
-					return "warning-row";
-				} else if(rowIndex === 3) {
-					return "success-row";
-				}
-				return "";
 			},
 			//删除数据
 			deleteRow(index, data) {

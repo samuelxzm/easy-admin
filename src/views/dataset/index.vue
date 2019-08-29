@@ -11,7 +11,7 @@
       style="width: 100%;"
       highlight-current-row
       @current-change="clickCurrent"
-       v-loading="loading"
+      v-loading="loading"
     >
       <el-table-column type="index" width="50" label="序号" align="center"></el-table-column>
       <el-table-column prop="name" label="名称"></el-table-column>
@@ -40,16 +40,26 @@
       </el-table-column>
     </el-table>
     <!-- 编辑数据 -->
-    <el-dialog :visible.sync="editDialogVisible" title="数据集管理" :close-on-click-modal="false">
-      <el-tabs v-model="activeName">
+    <el-dialog
+      :visible.sync="editDialogVisible"
+      title="数据集管理"
+      :close-on-click-modal="false"
+      top="15px"
+    >
+      <el-tabs v-model="activeName" class="box_content">
         <!-- 基本信息 -->
         <el-tab-pane label="基本信息" name="first">
           <el-form :model="form" ref="form" :rules="editRules" size="small" label-width="130px">
             <el-row>
               <el-col :span="12">
+                <el-form-item label="uuid" prop="id">
+                  <el-input v-model="form.id" autocomplete="off"></el-input>
+                </el-form-item>
                 <el-form-item label="名称" prop="name">
                   <el-input v-model="form.name" autocomplete="off"></el-input>
                 </el-form-item>
+              </el-col>
+              <el-col :span="12">
                 <el-form-item label="所属模块" prop="moduleId">
                   <el-select v-model="form.moduleId">
                     <el-option
@@ -60,11 +70,11 @@
                     ></el-option>
                   </el-select>
                 </el-form-item>
-              </el-col>
-              <el-col :span="12">
                 <el-form-item label="相关表" prop="relationTable">
                   <el-input v-model="form.relationTable" autocomplete="off"></el-input>
                 </el-form-item>
+              </el-col>
+              <el-col :span="12">
                 <el-form-item label="排序码" prop="sortNo">
                   <el-input v-model="form.sortNo" autocomplete="off"></el-input>
                 </el-form-item>
@@ -73,23 +83,23 @@
                 <el-form-item label="select子句" prop="sqlSelect">
                   <el-input v-model="form.sqlSelect" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="from的sql语句" prop="sqlFrom">
+                <el-form-item label="sql_from" prop="sqlFrom">
                   <el-input v-model="form.sqlFrom" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="默认where条件" prop="sqlWhereDefault">
+                <el-form-item label="sql_where" prop="sqlWhereDefault">
                   <el-input v-model="form.sqlWhereDefault" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="默认排序语句" prop="sqlOrderBy">
+                <el-form-item label="sql_orderby" prop="sqlOrderBy">
                   <el-input v-model="form.sqlOrderBy" autocomplete="off"></el-input>
                 </el-form-item>
-                </el-col>
+              </el-col>
               <el-col :span="12">
-                <el-form-item label="数据库分组" prop="sqlGroupBy">
+                 <el-form-item label="sql_groupby" prop="sqlGroupBy">
                   <el-input v-model="form.sqlGroupBy" autocomplete="off"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
-                <el-form-item label="分组having子句" prop="sqlHaving">
+                  <el-form-item label="sql_having" prop="sqlHaving">
                   <el-input v-model="form.sqlHaving" autocomplete="off"></el-input>
                 </el-form-item>
               </el-col>
@@ -164,7 +174,7 @@
             <el-table-column property="alias" label="别名" width="80"></el-table-column>
             <el-table-column property="fildName" label="字段名" width="100"></el-table-column>
             <el-table-column property="sql" label="sql语句" width="120"></el-table-column>
-            <el-table-column property="description"  label="说明"></el-table-column>
+            <el-table-column property="description" label="说明"></el-table-column>
             <el-table-column label="操作" width="140" align="center">
               <template slot-scope="scope">
                 <el-button
@@ -221,7 +231,12 @@
           </el-col>
         </el-row>
         <el-form-item label="说明" prop="description">
-          <el-input type="textarea" :rows="2" v-model="conditionForm.description" autocomplete="off"></el-input>
+          <el-input
+            type="textarea"
+            :rows="2"
+            v-model="conditionForm.description"
+            autocomplete="off"
+          ></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -289,6 +304,35 @@ export default {
         callback(new Error("排序码不能为空"));
       }
     };
+    var validateId = (rule, value, callback) => {
+      if (this.editType == "add") {
+        var reg = /^[\u4e00-\u9fa5]+$/;
+        if (!!value) {
+          if (!reg.test(value)) {
+            this.postRequest("/api/" + this.serviceName + "/jrr/dataset/id", {
+              id: value
+            }).then(result => {
+              if (result) {
+                callback(new Error("uuid重复"));
+              } else {
+                callback();
+              }
+            });
+          } else {
+            callback(new Error("uuid不能为中文"));
+          }
+        } else {
+          callback();
+        }
+      }else{
+        var reg = /^[\u4e00-\u9fa5]+$/;
+        if(reg.test(value)){
+           callback(new Error("uuid不能为中文"));
+        }else{
+          callback();
+        }
+      }
+    };
     return {
       loading: true,
       serviceName: "",
@@ -321,15 +365,14 @@ export default {
       addRules: {},
       //校验规则
       editRules: {
+        id:[{ validator: validateId, trigger: "blur"}],
+        moduleId:[{ required: true, message: "请选择模块", trigger: "blur" }],
         name: [{ required: true, message: "请输入名称", trigger: "blur" }],
-        // moduleId: [
-        //   { required: true, message: "请输入所属模块", trigger: "blur" }
-        // ],
-        relationTable: [{ required: true, message: "请输入相关表", trigger: "blur" }],
         // 校验名字不能重复，主要通过validator来指定验证器名称
         sortNo: [{ required: true, validator: validateName, trigger: "blur" }],
-        sqlSelect: [{ required: true, message: "请输入select子句", trigger: "blur" }],
-        sqlFrom: [{ required: true, message: "请输入from的sql语句", trigger: "blur"  }]
+        sqlFrom: [
+          { required: true, message: "请输入from的sql语句", trigger: "blur" }
+        ]
       },
       addNameRules: {
         alias: [{ required: true, message: "请输入别名", trigger: "blur" }],
@@ -367,12 +410,10 @@ export default {
     // 获取数据
     getData() {
       var that = this;
-      that
-        .postRequest("/api/ts-dataset/dataset/select/all")
-        .then(result => {
-          that.tableData = result;
-          that.loading = false;
-        });
+      that.postRequest("/api/ts-dataset/dataset/select/all").then(result => {
+        that.tableData = result;
+        that.loading = false;
+      });
     },
     // 获取模块
     getMoudle() {
@@ -411,7 +452,7 @@ export default {
           parentId: this.form.id
         })
         .then(result => {
-          console.log(result)
+          console.log(result);
           that.conditionData = result;
         });
     },
@@ -432,7 +473,7 @@ export default {
       var value = that.value;
       var shuttleData = this.shuttleData;
       var data = {
-        columnIds:[],
+        columnIds: [],
         ids: [],
         names: [],
         parentId: that.form.id,
@@ -441,7 +482,7 @@ export default {
       shuttleData.forEach(e => {
         value.forEach(el => {
           if (el == e.id) {
-            data.columnIds.push(guid())
+            data.columnIds.push(guid());
             data.ids.push(el);
             data.names.push(e.name);
           }
@@ -449,7 +490,7 @@ export default {
       });
       data.ids = data.ids.join(",");
       data.names = data.names.join(",");
-      data.columnIds = data.columnIds.join(",")
+      data.columnIds = data.columnIds.join(",");
 
       that
         .postRequest("/api/ts-dataset/column/insert/batch", data)
@@ -459,7 +500,7 @@ export default {
         });
     },
     // 穿梭框取消
-    onCancleShuttle(){
+    onCancleShuttle() {
       this.dialogAddVisibleName = false;
     },
     // 添加数据
@@ -495,7 +536,6 @@ export default {
         this.getData();
         this.getIdConlomData();
         this.getIdConditionData();
-
       }
       this.editDialogVisible = true;
     },
@@ -547,7 +587,7 @@ export default {
         this.conditionForm = Object.assign({}, data);
         delete this.conditionForm.createTime;
       } else {
-        console.log(this.form.id)
+        console.log(this.form.id);
         this.conditionForm = {
           parentId: this.form.id,
           fieldName: "",
@@ -595,14 +635,13 @@ export default {
     // 添加字段
     editCreateTableData() {
       this.dialogAddVisibleData = false;
-      if(this.form.relationTable != ''){
-
-                this.getShuttleFrame();
+      if (this.form.relationTable != "") {
+        this.getShuttleFrame();
         this.dialogAddVisibleName = true;
-      }else{
+      } else {
         this.$message({
-            message: "无相关表,请录入相关表"
-          });
+          message: "无相关表,请录入相关表"
+        });
       }
     },
     // 新增字段
@@ -614,6 +653,7 @@ export default {
       if (type == "edit") {
         this.addNameForm = Object.assign({}, data);
         delete this.addNameForm.createTime;
+        delete this.addNameForm.fieldId;
       } else {
         this.addNameForm = {
           parentId: this.form.id,
@@ -670,7 +710,10 @@ export default {
 .btn {
   float: right;
 }
-.el-dialog__body{
+.el-dialog__body {
   padding-top: 0 !important;
+}
+.box_content {
+  height: 680px;
 }
 </style>

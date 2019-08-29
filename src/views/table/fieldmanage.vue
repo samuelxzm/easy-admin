@@ -13,12 +13,12 @@
       <el-table-column type="index" align="center" width="50" label="序号"></el-table-column>
       <el-table-column prop="name" label="名称"></el-table-column>
       <el-table-column prop="summary" label="字段含义"></el-table-column>
-      <el-table-column prop="dataType" label="字段类型"></el-table-column>
+      <el-table-column prop="dataTypeName" label="字段类型"></el-table-column>
       <el-table-column prop="dataLength" label="长度"></el-table-column>
       <el-table-column prop="extendLength" label="小数位数"></el-table-column>
       <el-table-column prop="defaultValue" label="默认值"></el-table-column>
 
-      <el-table-column prop="status" align="center" label="状态">
+      <el-table-column prop="status" align="center" width="80"  label="状态">
         <template slot-scope="scope">
           <span v-if="scope.row.status==1">启用</span>
           <span v-else>停用</span>
@@ -155,6 +155,32 @@ export default {
   components: { ExportExcel },
 
   data() {
+    var validateName = (rule, value, callback) => {
+ 
+      if (this.name1!=value) {
+        var reg = /^([a-zA-Z]*_*[a-zA-Z]*)*$/;
+        if (!!value) {
+          if (reg.test(value)) {
+            this.postRequest("/api/" + this.serviceName + "/fields/is/exist/name", {
+              	"parentId":this.tableId,
+              name: value
+            }).then(result => {
+              if (result) {
+                callback(new Error("数据表名称重复"));
+              } else {
+                callback();
+              }
+            });
+          } else {
+            callback(new Error("请输入正确的表名称"));
+          }
+        } else {
+          callback(new Error("数据表名称不能为空"));
+        }
+      } else {
+        callback();
+      }
+    };
     let isInteger = (rule, value, callback) => {
       console.log(Number(value));
       if (!value && value != 0) {
@@ -176,6 +202,7 @@ export default {
       }, 0);
     };
     return {
+      name1:'',
       loading:'',
       serviceName: "",
       tableId: "",
@@ -195,7 +222,7 @@ export default {
         extendLength: [
           { required: true, validator: isInteger, trigger: "blur" }
         ],
-        name: [{ required: true, message: "请输入名称", trigger: "blur" }],
+       name: [{ required: true, validator: validateName, trigger: "blur" }],
         parentId: [
           { required: true, message: "请输入数据表Id", trigger: "blur" }
         ],
@@ -264,6 +291,7 @@ export default {
       this.editType = type;
       if (type == "edit") {
         this.editForm = Object.assign({}, data);
+        this.name1=this.editForm.name
         delete this.editForm.createTime;
         delete this.editForm.dataTypeName;
       } else {
@@ -286,6 +314,7 @@ export default {
     onStandardFieldSubmit() {
       var that = this;
       this.$refs.standardField.selection.forEach(e => {
+        delete e.dataTypeName
         this.editForm = { ...e, id: guid(), parentId: this.tableId };
         delete this.editForm.createTime;
         this.postRequest(

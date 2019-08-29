@@ -136,7 +136,6 @@ export default {
 
     closeSelectedTag() {
       let view=this.selectedTag
-      console.log(view)
       this.$store
         .dispatch("tagsView/delView", view)
         .then(({ visitedViews }) => {
@@ -145,7 +144,7 @@ export default {
           }
         });
     },
-    toLastView(visitedViews, view) {
+    toLastView(visitedViews) {
       const latestView = visitedViews.slice(-1)[0];
       if (latestView) {
         this.$router.push(latestView);
@@ -156,8 +155,7 @@ export default {
         this.$router.push("/");
       }
     },
-    openMenu(tag, e) {
-
+    openMenu(tag) {
       this.selectedTag = tag;
     }
   }
