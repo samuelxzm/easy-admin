@@ -104,13 +104,13 @@ axios.install = (Vue) => {
  */
 
 
-export const postRequest = (url, data,header) => {
+export const postRequest = (url, data) => {
     return axios({
         method: 'post',
         url: `${url}`,
         data: data,
         headers: {
-            'Content-Type': !!header?header:'application/json'
+            'Content-Type': 'application/json'
         }
     });
 }

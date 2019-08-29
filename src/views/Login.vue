@@ -47,12 +47,8 @@ export default {
         Cookies.remove("password");
       }
       this.postRequest(
-        "/api/ts-verity/login/login?username=" +
-          this.form.username +
-          "&password=" +
-          this.form.password,
-        {},
-        "application/x-www-form-urlencoded"
+        "/api/ts-verity/login/login" ,
+        this.form
       ).then(result => {
         if (result) {
           that.$router.push("/table/index");

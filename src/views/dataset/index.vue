@@ -14,10 +14,11 @@
       v-loading="loading"
     >
       <el-table-column type="index" width="50" label="序号" align="center"></el-table-column>
-      <el-table-column prop="name" label="名称"></el-table-column>
-      <el-table-column prop="moduleId" label="模块"></el-table-column>
-      <el-table-column prop="sortNo" label="排序"></el-table-column>
+      <el-table-column prop="name" label="名称" width="160"></el-table-column>
+      <el-table-column prop="moduleId" label="模块" width="120"></el-table-column>
+ 
       <el-table-column prop="description" label="说明"></el-table-column>
+           <el-table-column prop="sortNo" label="排序码" width="80"></el-table-column>
       <el-table-column label="操作" width="140" align="center">
         <template slot-scope="scope">
           <el-button
@@ -52,7 +53,7 @@
           <el-form :model="form" ref="form" :rules="editRules" size="small" label-width="130px">
             <el-row>
               <el-col :span="12">
-                <el-form-item label="uuid" prop="id">
+                <el-form-item label="id" prop="id">
                   <el-input v-model="form.id" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="名称" prop="name">
@@ -74,11 +75,7 @@
                   <el-input v-model="form.relationTable" autocomplete="off"></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="12">
-                <el-form-item label="排序码" prop="sortNo">
-                  <el-input v-model="form.sortNo" autocomplete="off"></el-input>
-                </el-form-item>
-              </el-col>
+      
               <el-col :span="24">
                 <el-form-item label="select子句" prop="sqlSelect">
                   <el-input v-model="form.sqlSelect" autocomplete="off"></el-input>
@@ -113,6 +110,11 @@
                 <el-form-item label="状态" prop="status">
                   <el-radio v-model="form.status" label="1">是</el-radio>
                   <el-radio v-model="form.status" label="0">否</el-radio>
+                </el-form-item>
+              </el-col>
+                      <el-col :span="12">
+                <el-form-item label="排序码" prop="sortNo">
+                  <el-input v-model="form.sortNo" autocomplete="off"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="24">
@@ -240,16 +242,16 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="onCancleCondition()">取 消</el-button>
-        <el-button type="primary" @click="onCheckedCondition('form')">确 定</el-button>
+        <el-button size="small"  @click="onCancleCondition()">取 消</el-button>
+        <el-button size="small"  type="primary" @click="onCheckedCondition('form')">确 定</el-button>
       </div>
     </el-dialog>
     <!-- 添加字段 -->
     <el-dialog title="添加字段" :visible.sync="dialogAddVisibleName" :close-on-click-modal="false">
       <el-transfer v-model="value" :data="shuttleData1"></el-transfer>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="onCancleShuttle()">取 消</el-button>
-        <el-button type="primary" @click="onCheckedShuttle()">确 定</el-button>
+        <el-button size="small" @click="onCancleShuttle()">取 消</el-button>
+        <el-button size="small"  type="primary" @click="onCheckedShuttle()">确 定</el-button>
       </div>
     </el-dialog>
     <!-- 新增字段 -->
@@ -281,8 +283,8 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="onCancleName()">取 消</el-button>
-        <el-button type="primary" @click="onCheckedName('form')">确 定</el-button>
+        <el-button size="small"  @click="onCancleName()">取 消</el-button>
+        <el-button size="small"  type="primary" @click="onCheckedName('form')">确 定</el-button>
       </div>
     </el-dialog>
   </el-card>
@@ -505,6 +507,9 @@ export default {
     },
     // 添加数据
     addTableData(type, data) {
+      this.activeName='first'
+      this.conditionData=[]
+      this.colomData=[]
       if (this.$refs.form) {
         this.$refs.form.clearValidate();
       }

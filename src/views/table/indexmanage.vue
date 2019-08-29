@@ -31,7 +31,7 @@
           <span v-else>否</span>
         </template>
       </el-table-column>
-      <!-- <el-table-column prop="status" label="状态"></el-table-column> -->
+      <el-table-column prop="sortNo" label="排序码" width="80"></el-table-column>
     
       <!-- <el-table-column prop="creatTime" label="记录创建时间"></el-table-column> -->
       <el-table-column label="操作" width="70" align="center">

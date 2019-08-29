@@ -44,6 +44,7 @@
       <el-table-column prop="shortName" label="简称"></el-table-column>
       <el-table-column prop="typeName" label="类型"></el-table-column>
       <el-table-column prop="summary" label="简介"></el-table-column>
+            <el-table-column prop="sortNo" label="排序码" width="80"></el-table-column>
       <el-table-column prop="status" align="center" label="状态" width="80"></el-table-column>
       <el-table-column prop="remarks" label="备注"></el-table-column>
       <el-table-column label="操作" width="140" align="center">

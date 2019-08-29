@@ -17,7 +17,9 @@
       <el-table-column prop="dataLength" label="长度"></el-table-column>
       <el-table-column prop="extendLength" label="小数位数"></el-table-column>
       <el-table-column prop="defaultValue" label="默认值"></el-table-column>
-
+    <el-table-column prop="sortNo"  width="80"  label="排序码">
+   
+      </el-table-column>
       <el-table-column prop="status" align="center" width="80"  label="状态">
         <template slot-scope="scope">
           <span v-if="scope.row.status==1">启用</span>

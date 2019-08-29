@@ -4,11 +4,16 @@
       <!-- 左侧菜单栏 -->
       <el-col :span="6">
         <el-card>
-          <el-row>
+          <el-row style="margin-bottom:20px;">
             <el-button type="primary" size="small" @click="addMenu">添加菜单</el-button>
             <el-button type="primary" size="small" @click="addChildMenu">添加子菜单</el-button>
           </el-row>
-          <el-tree :data="childrenData" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
+          <el-tree
+            :highlight-current="true"
+            :data="childrenData"
+            :props="defaultProps"
+            @node-click="handleNodeClick"
+          ></el-tree>
         </el-card>
       </el-col>
       <!-- 切换表单 -->
@@ -30,15 +35,30 @@
                 <el-form-item label="组件" prop="component">
                   <el-input v-model="form.component"></el-input>
                 </el-form-item>
-                <el-form-item label="参数" prop="parameter">
-                  <el-input v-model="form.parameter"></el-input>
-                </el-form-item>
+
                 <el-form-item label="微服务名" prop="serviceName">
                   <el-input v-model="form.serviceName"></el-input>
                 </el-form-item>
-                <el-form-item label="作者" prop="author">
-                  <el-input v-model="form.author"></el-input>
-                </el-form-item>
+                <el-row>
+                  <el-col :span="12">
+                    <el-form-item label="保持缓存" prop="keepAlive">
+                      <el-radio v-model="form.keepAlive" label="true">是</el-radio>
+                      <el-radio v-model="form.keepAlive" label="false">否</el-radio>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="12">
+                    <el-form-item label="状态" prop="status">
+                      <el-select v-model="form.status">
+                        <el-option
+                          v-for="item in statusOption"
+                          :key="item.id"
+                          :label="item.name"
+                          :value="item.code"
+                        ></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
               </el-col>
               <el-col :span="12">
                 <el-form-item label="图标" prop="iconCls">
@@ -48,26 +68,22 @@
                   <el-input v-model="form.path"></el-input>
                 </el-form-item>
                 <el-form-item label="页面类型" prop="type">
-                  <el-input v-model="form.type"></el-input>
+                  <el-input v-model="form.type" placeholder="inner/outer/hidden"></el-input>
                 </el-form-item>
-                <el-form-item label="保持缓存" prop="keepAlive">
-                  <el-input v-model="form.keepAlive"></el-input>
+                <el-form-item label="参数" prop="parameter">
+                  <el-input v-model="form.parameter"></el-input>
                 </el-form-item>
-                <el-form-item label="创建人" prop="createUser">
-                  <el-input v-model="form.createUser"></el-input>
-                </el-form-item>
+
                 <el-row>
                   <el-col :span="12">
-                <el-form-item label="状态" prop="status">
-                  <el-select  v-model="form.status">
-                    <el-option v-for="item in statusOption" :key="item.id" :label="item.name" :value="item.code"></el-option>
-                  </el-select>
-                </el-form-item>
+                    <el-form-item label="排序码" prop="sortNo">
+                      <el-input v-model.number="form.sortNo"></el-input>
+                    </el-form-item>
                   </el-col>
-                             <el-col :span="12">
-                <el-form-item label="排序码" prop="sortNo">
-             <el-input v-model="form.sortNo"></el-input>
-                </el-form-item>
+                  <el-col :span="12">
+                    <el-form-item label="作者" prop="author">
+                      <el-input v-model="form.author"></el-input>
+                    </el-form-item>
                   </el-col>
                 </el-row>
               </el-col>
@@ -92,7 +108,7 @@
 <script>
 import { SubmitForm, guid, DeleteStatus } from "@/assets/js/common.js";
 export default {
-    name:'菜单管理',
+  name: "menusManageindex",
   data() {
     return {
       serviceName: "",
@@ -103,17 +119,27 @@ export default {
       },
       form: {},
       editType: "add",
-      statusOption:[],
-      formRules:{
+      statusOption: [],
+      formRules: {
         name: [{ required: true, message: "请输入菜单名称", trigger: "blur" }],
-        sortNo: [         ]
+        sortNo: [
+          { required: true, message: "请输入排序码", trigger: "blur" },
+          { type: "number", message: "请输入数字", trigger: "blur" }
+        ],
+        path: [{ required: true, message: "请输入路由地址", trigger: "blur" }],
+        component: [
+          { required: true, message: "请输入组件路径", trigger: "blur" }
+        ],
+        serviceName: [
+          { required: true, message: "请输入微服务名", trigger: "blur" }
+        ]
       }
     };
   },
   created() {
     this.serviceName = this.$router.currentRoute.meta.serviceName;
     this.getData();
-    this.getOption()
+    this.getOption();
   },
   // 方法
   methods: {
@@ -138,11 +164,12 @@ export default {
           that.childrenData = dd;
         });
     },
-    getOption(){
+    getOption() {
       var that = this;
       that
-        .getRequest( "/api/ts-projectdeploy/project/status/query").then(result => {
-          that.statusOption=result
+        .getRequest("/api/ts-projectdeploy/project/status/query")
+        .then(result => {
+          that.statusOption = result;
         });
     },
     handleNodeClick(data) {
@@ -158,7 +185,7 @@ export default {
         type: "inner",
         serviceName: "",
         iconCls: "",
-        keepAlive: "ture",
+        keepAlive: "true",
         path: "",
         component: "Layout",
         parameter: "",
@@ -166,8 +193,7 @@ export default {
         remarks: "",
         author: "",
         status: "1",
-        createUser: "",
-        sortNo:100
+        sortNo: 100
       };
     },
     addChildMenu(e) {
@@ -180,17 +206,15 @@ export default {
           type: "inner",
           serviceName: "",
           iconCls: "",
-          keepAlive: "ture",
+          keepAlive: "true",
           path: "",
           component: "Layout",
           parameter: "",
           summary: "",
           remarks: "",
           author: "",
-
           status: "1",
-          createUser: "",
-                  sortNo:100
+          sortNo: 100
         };
       } else {
         this.form = {
@@ -200,7 +224,7 @@ export default {
           type: "inner",
           serviceName: "",
           iconCls: "",
-          keepAlive: "ture",
+          keepAlive: "true",
           path: "",
           component: "Layout",
           parameter: "",
@@ -209,8 +233,7 @@ export default {
           author: "",
 
           status: "1",
-          createUser: "",
-                  sortNo:100
+          sortNo: 100
         };
       }
     },
@@ -221,7 +244,7 @@ export default {
       let type = this.editType;
       let addSqlId = "/api/" + this.serviceName + "/menus/insert";
       let changeSqlId = "/api/" + this.serviceName + "/menus/update";
-    
+
       SubmitForm(this, "form", "form", type, addSqlId, changeSqlId, function() {
         that.getData();
       });

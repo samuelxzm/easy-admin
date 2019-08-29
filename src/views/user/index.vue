@@ -96,7 +96,7 @@ export default {
           this.postRequest("/api/" + this.serviceName + "/user/get/by/code", {
             code: value
           }).then(result => {
-            if (!result.data) {
+            if (!result) {
               callback();
             } else {
               callback(new Error("账号重复"));
