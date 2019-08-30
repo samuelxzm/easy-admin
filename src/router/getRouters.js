@@ -10,7 +10,7 @@ let getRouter
 if(settings.useAjaxRouter){
   router.beforeEach((to, from, next) => {
     NProgress.start()
-    if (!getRouter) {
+    if (!getRouter&&to.path!='/login') {
       if (!getObjArr('router')) {
         axios.get('/api/ts-table/menus/select/all').then(res => {
          let dd=[]

@@ -31,6 +31,7 @@
       size="medium"
       style="margin-left:15px;align-items: center;display: flex;"
       :hide-on-click="false"
+      trigger="click"
     >
       <el-button
         style="color:#4b4b4b;font-size: 20px;"

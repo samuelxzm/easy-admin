@@ -4,16 +4,35 @@
       <el-button type="primary" size="small" @click="addSubmit('add')">增加</el-button>
     </div>
     <el-table border :data="tableData" v-loading="loading">
+
+       <el-table-column type="expand">
+      <template slot-scope="props">
+        <el-form label-position="right" label-width="120px">
+          <el-form-item label="前台提示信息：">
+            <span>{{ props.row.frontendMessage }}</span>
+          </el-form-item>
+          <el-form-item label="后台提示信息：">
+            <span>{{ props.row.backendMessage }}</span>
+          </el-form-item>
+          <el-form-item label="说明：">
+            <span>{{ props.row.description }}</span>
+          </el-form-item>
+        </el-form>
+      </template>
+    </el-table-column>
+
       <el-table-column label="序号" type="index" width="50" align="center" valign="middle"></el-table-column>
-      <el-table-column prop="code" label="编码"></el-table-column>
+
+
+      <el-table-column prop="code" label="编码" width="120"></el-table-column>
 
       <el-table-column prop="name" label="名称"></el-table-column>
       <el-table-column prop="level" label="级别" align="center" width="80"></el-table-column>
       <el-table-column prop="type" label="分类"></el-table-column>
 
-      <el-table-column prop="frontendMessage" label="前台提示信息"></el-table-column>
+      <!-- <el-table-column prop="frontendMessage" label="前台提示信息"></el-table-column>
       <el-table-column prop="backendMessage" label="后台提示信息"></el-table-column>
-      <el-table-column prop="description" label="说明"></el-table-column>
+      <el-table-column prop="description" label="说明"></el-table-column> -->
       <el-table-column prop="status" label="状态" align="center" width="80">
         <template slot-scope="scope">
           <span v-if="scope.row.status==1">启用</span>

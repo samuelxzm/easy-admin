@@ -316,6 +316,7 @@ export default {
     onStandardFieldSubmit() {
       var that = this;
       this.$refs.standardField.selection.forEach(e => {
+        e.sortNo=1000
         delete e.dataTypeName
         this.editForm = { ...e, id: guid(), parentId: this.tableId };
         delete this.editForm.createTime;

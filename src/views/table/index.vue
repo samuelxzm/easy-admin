@@ -36,11 +36,8 @@
           <el-table-column type="index" align="center" width="50" label="序号"></el-table-column>
           <el-table-column prop="name" label="数据表名称"></el-table-column>
                 <el-table-column prop="title" label="数据表含义"></el-table-column>
-
       <el-table-column prop="moduleName" label="模块" width="100"></el-table-column>
       <el-table-column prop="idType" label="id类型"></el-table-column>
-
-
       <el-table-column prop="shortName" label="简称"></el-table-column>
       <el-table-column prop="typeName" label="类型"></el-table-column>
       <el-table-column prop="summary" label="简介"></el-table-column>
