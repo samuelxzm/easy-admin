@@ -6,11 +6,13 @@
     </div>
     <!-- 表格数据 -->
     <el-table v-loading="tableLoading" :data="tableData" border>
+      <el-table-column type="index"  align="center" width="50" label="序号"></el-table-column>
       <el-table-column prop="deployProject" width="160" align="center" label="部署项目"></el-table-column>
       <el-table-column prop="hostName" width="160" align="center" label="主机名称"></el-table-column>
       <el-table-column prop="deployMethod" width="160" align="center" label="部署方式"></el-table-column>
       <el-table-column prop="port" width="160" align="center" label="端口号"></el-table-column>
       <el-table-column prop="domainName" align="center" label="绑定域名"></el-table-column>
+      <el-table-column prop="sortNo"  align="center" width="80" label="排序码"></el-table-column>
       <el-table-column align="center" width="140" label="操作">
         <template slot-scope="scope">
           <el-button
@@ -130,37 +132,10 @@
 </template>
 <script>
 import { SubmitForm, guid, DeleteStatus } from "@/assets/js/common.js";
+import { isCheckIp,isCheckPort } from "@/assets/js/validate.js";
 export default {
   name:'projectDeloyment',
   data() {
-    // 端口号校验
-    let checkPort = (rule, value, callback) => {
-      let reg = /^([1-9][0-9]{0,3}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]{1}|6553[0-5])$/;
-      if (!value) {
-        return callback(new Error("请输入端口号"));
-      } else {
-        let port = reg.test(value);
-        if (!port) {
-          return callback(new Error("请输入正确的端口号"));
-        } else {
-          callback();
-        }
-      }
-    };
-    // 内网ip校验
-    let checkIp = (rule, value, callback) => {
-      let reg = /^(([1-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*)|([1-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*))$/;
-      if (!value) {
-        return callback(new Error("请输入容器ip"));
-      } else {
-        let ip = reg.test(value);
-        if (!ip) {
-          return callback(new Error("请输入正确的ip地址"));
-        } else {
-          callback();
-        }
-      }
-    };
     return {
       tableLoading: true,
       dialogFormVisible: false,
@@ -183,11 +158,11 @@ export default {
         serverId: [
           { required: true, message: "请选择服务器主机", trigger: "change" }
         ],
-        port: [{ required: true, validator: checkPort, trigger: "blur" }],
+        port: [{ required: true, validator: isCheckPort, trigger: "blur" }],
         dockerName: [
           { required: true, message: "请输入docker名称", trigger: "blur" }
         ],
-        dockerIp: [{ required: true, validator: checkIp, trigger: "blur" }],
+        dockerIp: [{ required: true, validator: isCheckIp, trigger: "blur" }],
         domainName: [
           { required: true, message: "请输入绑定域名", trigger: "blur" }
         ],
@@ -210,6 +185,7 @@ export default {
       that
         .getRequest("/api/" + this.serviceName + "/project/deploy/query")
         .then(result => {
+          console.log(result)
           that.tableData = result;
           that.tableLoading = false;
         });
@@ -280,8 +256,8 @@ export default {
           dockerName: "",
           dockerIp: "",
           domainName: "",
-          sortNo: 100,
-          status: this.statusOptions > 0 ? this.statusOptions[0].code : "",
+          sortNo: 80,
+          status: this.statusOptions.length > 0 ? this.statusOptions[0].code : "",
           description: ""
         };
       }

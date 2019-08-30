@@ -6,12 +6,14 @@
     </div>
     <!-- 表格数据 -->
     <el-table :data="tableData" v-loading="tableLoading" border>
+      <el-table-column type="index"  align="center" width="50" label="序号"></el-table-column>
       <el-table-column prop="name" width="140" align="center" label="名称"></el-table-column>
       <el-table-column prop="placeName" width="140" align="center" label="环境名称"></el-table-column>
       <el-table-column prop="osType" width="140" align="center" label="系统类型"></el-table-column>
       <el-table-column prop="osVersion" width="140" align="center" label="系统版本"></el-table-column>
       <el-table-column prop="ipAddress" width="140" align="center" label="内网地址"></el-table-column>
       <el-table-column prop="ipAddressOut" align="center" label="外网地址"></el-table-column>
+      <el-table-column prop="sortNo" align="center" label="排序码" width="80"></el-table-column>
       <el-table-column align="center" width="140" label="操作">
         <template slot-scope="scope">
           <el-button
@@ -130,22 +132,9 @@
 </template>
 <script>
 import { SubmitForm, guid, DeleteStatus } from "@/assets/js/common.js";
+import {isCheckIp} from "@/assets/js/validate.js"
 export default {
   data() {
-    // 内网ip校验
-    let checkIp = (rule, value, callback) => {
-      let reg = /^(([1-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*)|([1-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*))$/;
-      if (!value) {
-        return callback(new Error("请输入内网地址"));
-      } else {
-        let ip = reg.test(value);
-        if (!ip) {
-          return callback(new Error("请输入正确的ip地址"));
-        } else {
-          callback();
-        }
-      }
-    };
     return {
       tableLoading: true,
       dialogFormVisible: false,
@@ -172,7 +161,7 @@ export default {
         osVersion: [
           { required: true, message: "请输入操作系统版本", trigger: "blur" }
         ],
-        ipAddress: [{ required: true, validator: checkIp, trigger: "blur" }],
+        ipAddress: [{ required: true, validator: isCheckIp, trigger: "blur" }],
         ipAddressOut: [
           { required: true, message: "请输入外网地址", trigger: "blur" }
         ],
@@ -245,7 +234,7 @@ export default {
           osVersion: "",
           ipAddress: "",
           ipAddressOut: "",
-          sortNo: 100,
+          sortNo: 80,
           hasDocker: "1",
           hasNginx: "1",
           status:

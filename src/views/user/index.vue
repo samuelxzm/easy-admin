@@ -27,9 +27,8 @@
       <el-table-column label="序号" type="index" width="50"></el-table-column>
       <el-table-column prop="code" label="账号"></el-table-column>
       <el-table-column prop="name" label="姓名"></el-table-column>
-      <el-table-column prop="createUser" label="创建人" width="180"></el-table-column>
-      <el-table-column prop=" createTime " label="创建时间" width="180"></el-table-column>
-      <el-table-column prop="status" label="状态" width="80">
+      <el-table-column prop="sortNo" label="排序码" width="80" align="center"></el-table-column>
+      <el-table-column prop="status" label="状态" width="80" align="center">
         <template slot-scope="scope">
           <span v-if="scope.row.status==1">启用</span>
           <span v-else>停用</span>
@@ -60,14 +59,14 @@
       <el-form :rules="rules" size="small" :model="studentForm" label-width="80px" ref="studentForm">
         <!-- status-icon -->
         <el-form-item label="账号" prop="code">
-          <el-input v-model="studentForm.code" :disabled="editType=='edit'"></el-input>
+          <el-input v-model="studentForm.code"></el-input>
         </el-form-item>
         <el-form-item label="姓名" prop="name">
           <el-input v-model="studentForm.name"></el-input>
         </el-form-item>
 
-        <el-form-item label="创建人" prop="createUser">
-          <el-input v-model="studentForm.createUser"></el-input>
+        <el-form-item label="排序码" prop="sortNo">
+          <el-input v-model="studentForm.sortNo"></el-input>
         </el-form-item>
         <el-form-item label="状态" prop="status">
           <el-select v-model="studentForm.status" style="width: 100px;">
@@ -86,12 +85,13 @@
 <script>
 //	import { guid } from "@/assets/js/common.js";
 import { SubmitForm, guid, DeleteStatus } from "@/assets/js/common.js";
+import { isInteger } from '@/assets/js/validate.js'
 export default {
   name:"userindex",
   // 获取数据
   data() {
     var validateCode = (rule, value, callback) => {
-      if (this.editType == "add") {
+      if (this.editType == "add" || this.name1 != value) {
         if (!!value) {
           this.postRequest("/api/" + this.serviceName + "/user/get/by/code", {
             code: value
@@ -127,8 +127,10 @@ export default {
             message: "姓名不能为空", //规则
             trigger: "blur" //何事件触发
           }
-        ]
+        ],
+        sortNo: [{ required: true, validator: isInteger, trigger: "blur" }]
       },
+      name1:'',
       serviceName: "",
       studentDialog: false,
       editType: "add",
@@ -180,6 +182,7 @@ export default {
       this.editType = type;
       if (type == "edit") {
         this.studentForm = Object.assign({}, data);
+        this.name1 = this.studentForm.name
         delete this.studentForm.createTime;
       } else {
         this.studentForm = {
@@ -187,7 +190,7 @@ export default {
           code: "",
           status: "1",
           id: guid(),
-          createUser: ""
+          sortNo: "80"
         };
       }
       this.addDialog = true;

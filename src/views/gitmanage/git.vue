@@ -7,11 +7,12 @@
 		<!--增加内容的弹框-->
 
 		<el-table border :data="tableData"  v-loading="loading">
-
+			<el-table-column type="index"  align="center" width="50" label="序号"></el-table-column>
 			<el-table-column prop="name" label="名称"></el-table-column>
 			<el-table-column prop="url" label="仓库地址"></el-table-column>
 			<el-table-column prop="description" label="说明" width="180"></el-table-column>
-			<el-table-column prop="status" label="状态" width="80">
+			<el-table-column prop="sortNo" label="排序码" width="80" align="center"></el-table-column>
+			<el-table-column prop="status" label="状态" width="80" align="center">
 				<template slot-scope="scope">
 					<span v-if="scope.row.status==1">启用</span>
 					<span v-else>停用</span>
@@ -82,12 +83,12 @@
 	export default {
 		data() {
 			var validateName = (rule, value, callback) => {
-				if(this.editType == "add") {
+				if(this.editType == "add" || this.name1 != value) {
 					if(!!value) {
 						this.postRequest("/api/" + this.serviceName + "/jrr/gitRepository/name", {
 							name: value
 						}).then(result => {
-							if(!result.data) {
+							if(!result) {
 								callback();
 							} else {
 								callback(new Error("账号重复"));
@@ -101,6 +102,7 @@
 				}
 			};
 			return {
+				name1:'',
 				loading: true,
 				// 校验规则
 				rules: {
@@ -148,6 +150,7 @@
 				this.editType = type;
 				if(type == "edit") {
 					this.studentForm = Object.assign({}, data);
+					this.name1 = this.studentForm.name
 					delete this.studentForm.createTime;
 				} else {
 					this.studentForm = {
@@ -158,7 +161,7 @@
 						userName:"",
 						password:"",
 						description:"",
-						sortNo: "100"
+						sortNo: "80"
 					};
 				}
 				this.addDialog = true;

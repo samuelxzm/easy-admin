@@ -7,10 +7,9 @@
     <!-- 表格数据 -->
     <el-table v-loading="tableLoading" :data="tableData" border>
       <el-table-column type="index"  align="center" width="50" label="序号"></el-table-column>
-      <el-table-column prop="name" align="center" width="180" label="模块名称"></el-table-column>
-      <el-table-column prop="summary" align="center" label="简介"></el-table-column>
-      <el-table-column prop="createUser" align="center" width="180" label="创建人"></el-table-column>
-      <el-table-column prop="createTime" align="center" width="180" label="创建时间"></el-table-column>
+      <el-table-column prop="name" width="120" label="模块名称"></el-table-column>
+      <el-table-column prop="summary" label="简介"></el-table-column>
+      <el-table-column prop="sortNo" align="center" width="80" label="排序码"></el-table-column>
       <el-table-column label="操作" align="center" width="140">
         <template slot-scope="scope">
           <el-button
@@ -52,13 +51,13 @@
     >
       <el-form :model="moduleForm" :rules="rules" ref="moduleForm"  size="small" label-width="80px">
         <el-form-item label="模块名称" prop="name">
-          <el-input v-model="moduleForm.name" :disabled="editType=='edit'"></el-input>
+          <el-input v-model="moduleForm.name"></el-input>
         </el-form-item>
         <el-form-item label="简介" prop="summary">
           <el-input v-model="moduleForm.summary"></el-input>
         </el-form-item>
-        <el-form-item label="创建人" prop="createUser">
-          <el-input v-model="moduleForm.createUser"></el-input>
+        <el-form-item label="排序码" prop="sortNo">
+          <el-input v-model="moduleForm.sortNo"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -70,18 +69,20 @@
 </template>
 <script>
 import { SubmitForm, guid, DeleteStatus } from "@/assets/js/common.js";
+import { isInteger,validateCodeRepeat } from '@/assets/js/validate.js'
 export default {
   name:"moduleindex",
   data() {
     // 模块名称校验
     var validateName = (rule, value, callback) => {
-      if (this.editType == "add") {
+      if (this.editType == 'add' || this.name1 != value) {
         var reg = /^[a-zA-Z]+$/;
         if (!!value) {
           if (reg.test(value)) {
             this.postRequest("/api/" + this.serviceName + "/module/get/by/name", {
               name: value
             }).then(result => {
+              console.log(result)
               if (result) {
                 callback(new Error("模块名称重复"));
               } else {
@@ -92,7 +93,7 @@ export default {
             callback(new Error("请输入英文"));
           }
         } else {
-          callback(new Error("数据表名称不能为空"));
+          callback(new Error("模块名不能为空"));
         }
       }
       else{
@@ -102,6 +103,7 @@ export default {
     return {
       tableLoading: "",
       serviceName: "",
+      name1:"",
       currentPage4: 4, //当前页
       moduleFormVisible: false, //控制修改添加数据弹出框
       type: "",
@@ -111,7 +113,7 @@ export default {
       rules: {
         id: [{ required: true, message: "请输入id", trigger: "blur" }],
         name: [{ required: true, validator: validateName, trigger: "blur" }],
-        summary: [{ required: true, message: "请输入简介", trigger: "blur" }]
+        sortNo: [{ required: true, validator: isInteger, trigger: "blur" }]
       },
       tableData: [] // 表格数据
     };
@@ -139,12 +141,13 @@ export default {
       this.editType = type;
       if (type == "edit") {
         this.moduleForm = Object.assign({}, data);
+        this.name1 = this.moduleForm.name;
         delete this.moduleForm.createTime;
       } else {
         this.moduleForm = {
           name: "",
           summary: "",
-          createUser: "",
+          sortNo: "80",
           id: guid()
         };
       }
@@ -158,7 +161,7 @@ export default {
       let changeSqlId = "/api/" + this.serviceName + "/module/update";
       SubmitForm(
         this,
-        formName,
+        "moduleForm",
         "moduleForm",
         type,
         addSqlId,

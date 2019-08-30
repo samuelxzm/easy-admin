@@ -16,9 +16,9 @@
       <el-table-column type="index" width="50" label="序号" align="center"></el-table-column>
       <el-table-column prop="name" label="名称" width="160"></el-table-column>
       <el-table-column prop="moduleId" label="模块" width="120"></el-table-column>
- 
+
       <el-table-column prop="description" label="说明"></el-table-column>
-           <el-table-column prop="sortNo" label="排序码" width="80"></el-table-column>
+      <el-table-column prop="sortNo" label="排序码" width="80"></el-table-column>
       <el-table-column label="操作" width="140" align="center">
         <template slot-scope="scope">
           <el-button
@@ -75,7 +75,7 @@
                   <el-input v-model="form.relationTable" autocomplete="off"></el-input>
                 </el-form-item>
               </el-col>
-      
+
               <el-col :span="24">
                 <el-form-item label="select子句" prop="sqlSelect">
                   <el-input v-model="form.sqlSelect" autocomplete="off"></el-input>
@@ -91,12 +91,12 @@
                 </el-form-item>
               </el-col>
               <el-col :span="12">
-                 <el-form-item label="sql_groupby" prop="sqlGroupBy">
+                <el-form-item label="sql_groupby" prop="sqlGroupBy">
                   <el-input v-model="form.sqlGroupBy" autocomplete="off"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
-                  <el-form-item label="sql_having" prop="sqlHaving">
+                <el-form-item label="sql_having" prop="sqlHaving">
                   <el-input v-model="form.sqlHaving" autocomplete="off"></el-input>
                 </el-form-item>
               </el-col>
@@ -112,7 +112,7 @@
                   <el-radio v-model="form.status" label="0">否</el-radio>
                 </el-form-item>
               </el-col>
-                      <el-col :span="12">
+              <el-col :span="12">
                 <el-form-item label="排序码" prop="sortNo">
                   <el-input v-model="form.sortNo" autocomplete="off"></el-input>
                 </el-form-item>
@@ -139,10 +139,10 @@
           </div>
           <el-table :data="conditionData" border>
             <el-table-column type="index" width="50" label="序号" align="center"></el-table-column>
-            <el-table-column property="fieldName" label="字段名" width="80"></el-table-column>
-            <el-table-column property="conditionType" label="条件类型" width="80"></el-table-column>
-            <el-table-column property="sql" label="sql语句" width="120"></el-table-column>
-            <el-table-column property="description" label="说明"></el-table-column>
+            <el-table-column property="fieldName" label="字段名" width="120"></el-table-column>
+            <el-table-column property="conditionType" label="条件类型" width="120"></el-table-column>
+            <el-table-column property="sql" label="sql语句" ></el-table-column>
+            <!-- <el-table-column property="description" label="说明"></el-table-column> -->
             <el-table-column label="操作" width="140" align="center">
               <template slot-scope="scope">
                 <el-button
@@ -173,10 +173,10 @@
           </div>
           <el-table :data="colomData" border>
             <el-table-column type="index" width="50" label="序号" align="center"></el-table-column>
-            <el-table-column property="alias" label="别名" width="80"></el-table-column>
-            <el-table-column property="fildName" label="字段名" width="100"></el-table-column>
-            <el-table-column property="sql" label="sql语句" width="120"></el-table-column>
-            <el-table-column property="description" label="说明"></el-table-column>
+            <el-table-column property="alias" label="别名" width="120"></el-table-column>
+            <el-table-column property="fieldName" label="字段名" width="120"></el-table-column>
+            <el-table-column property="sql" label="sql语句" ></el-table-column>
+            <!-- <el-table-column property="description" label="说明"></el-table-column> -->
             <el-table-column label="操作" width="140" align="center">
               <template slot-scope="scope">
                 <el-button
@@ -242,8 +242,8 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button size="small"  @click="onCancleCondition()">取 消</el-button>
-        <el-button size="small"  type="primary" @click="onCheckedCondition('form')">确 定</el-button>
+        <el-button size="small" @click="onCancleCondition()">取 消</el-button>
+        <el-button size="small" type="primary" @click="onCheckedCondition('form')">确 定</el-button>
       </div>
     </el-dialog>
     <!-- 添加字段 -->
@@ -251,7 +251,7 @@
       <el-transfer v-model="value" :data="shuttleData1"></el-transfer>
       <div slot="footer" class="dialog-footer">
         <el-button size="small" @click="onCancleShuttle()">取 消</el-button>
-        <el-button size="small"  type="primary" @click="onCheckedShuttle()">确 定</el-button>
+        <el-button size="small" type="primary" @click="onCheckedShuttle()">确 定</el-button>
       </div>
     </el-dialog>
     <!-- 新增字段 -->
@@ -283,8 +283,8 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button size="small"  @click="onCancleName()">取 消</el-button>
-        <el-button size="small"  type="primary" @click="onCheckedName('form')">确 定</el-button>
+        <el-button size="small" @click="onCancleName()">取 消</el-button>
+        <el-button size="small" type="primary" @click="onCheckedName('form')">确 定</el-button>
       </div>
     </el-dialog>
   </el-card>
@@ -326,11 +326,11 @@ export default {
         } else {
           callback();
         }
-      }else{
+      } else {
         var reg = /^[\u4e00-\u9fa5]+$/;
-        if(reg.test(value)){
-           callback(new Error("uuid不能为中文"));
-        }else{
+        if (reg.test(value)) {
+          callback(new Error("uuid不能为中文"));
+        } else {
           callback();
         }
       }
@@ -367,8 +367,8 @@ export default {
       addRules: {},
       //校验规则
       editRules: {
-        id:[{ validator: validateId, trigger: "blur"}],
-        moduleId:[{ required: true, message: "请选择模块", trigger: "blur" }],
+        id: [{ validator: validateId, trigger: "blur" }],
+        moduleId: [{ required: true, message: "请选择模块", trigger: "blur" }],
         name: [{ required: true, message: "请输入名称", trigger: "blur" }],
         // 校验名字不能重复，主要通过validator来指定验证器名称
         sortNo: [{ required: true, validator: validateName, trigger: "blur" }],
@@ -493,13 +493,18 @@ export default {
       data.ids = data.ids.join(",");
       data.names = data.names.join(",");
       data.columnIds = data.columnIds.join(",");
-
-      that
-        .postRequest("/api/ts-dataset/column/insert/batch", data)
-        .then(result => {
-          that.getIdConlomData();
-          that.dialogAddVisibleName = false;
+      if (data.ids != "") {
+        that
+          .postRequest("/api/ts-dataset/column/insert/batch", data)
+          .then(result => {
+            that.getIdConlomData();
+            that.dialogAddVisibleName = false;
+          });
+      } else {
+        that.$message({
+          message: "添加字段不能为空"
         });
+      }
     },
     // 穿梭框取消
     onCancleShuttle() {
@@ -507,9 +512,9 @@ export default {
     },
     // 添加数据
     addTableData(type, data) {
-      this.activeName='first'
-      this.conditionData=[]
-      this.colomData=[]
+      this.activeName = "first";
+      this.conditionData = [];
+      this.colomData = [];
       if (this.$refs.form) {
         this.$refs.form.clearValidate();
       }
@@ -522,7 +527,7 @@ export default {
         this.getIdConditionData();
       } else {
         this.form = {
-          id:guid(),
+          id: guid(),
           name: "",
           moduleId: "",
           relationTable: "",
@@ -691,6 +696,7 @@ export default {
     },
     // 新增字段数据删除
     handleCreateDelete(index, data) {
+      this.value = [];
       var that = this;
       DeleteStatus(
         this,
@@ -706,7 +712,6 @@ export default {
   }
 };
 </script>
-// 样式
 <style>
 .add_btn {
   float: right;
@@ -720,5 +725,8 @@ export default {
 }
 .box_content {
   height: 680px;
+}
+.el-transfer-panel__list {
+  width: 230px;
 }
 </style>
