@@ -216,8 +216,8 @@ export default {
     // 获取数据
     getData() {
       this.loading = true;
-      this.getRequest("/api/ts-git-code/code/project/get/all").then(result => {
-        this.tableData = result.codeProject;
+      this.getRequest("/api/ts-common/gar/codeProject").then(result => {
+        this.tableData = result;
         this.loading = false;
       });
     },
@@ -263,7 +263,7 @@ export default {
         "studentForm",
         "studentForm",
         this.editType,
-        "/api/ts-git-code/code/project/insert",
+        "/api/" + this.serviceName + "/cor/codeProject",
         "/api/" + this.serviceName + "/uor/codeProject",
         function() {
           that.getData();

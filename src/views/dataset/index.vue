@@ -16,6 +16,7 @@
       <el-table-column type="index" width="50" label="序号" align="center"></el-table-column>
       <el-table-column prop="name" label="名称" width="160"></el-table-column>
       <el-table-column prop="moduleName" label="模块" width="120"></el-table-column>
+
       <el-table-column prop="description" label="说明"></el-table-column>
       <el-table-column prop="sortNo" label="排序码" width="80"></el-table-column>
       <el-table-column label="操作" width="140" align="center">
@@ -246,8 +247,8 @@
       </div>
     </el-dialog>
     <!-- 添加字段 -->
-    <el-dialog title="添加字段" :visible.sync="dialogAddVisibleName" :close-on-click-modal="false">
-      <el-transfer v-model="value" :data="shuttleData1"></el-transfer>
+    <el-dialog title="添加字段" :visible.sync="dialogAddVisibleName" :close-on-click-modal="false" >
+      <el-transfer v-model="value" :data="shuttleData1" :titles='titles'></el-transfer>
       <div slot="footer" class="dialog-footer">
         <el-button size="small" @click="onCancleShuttle()">取 消</el-button>
         <el-button size="small" type="primary" @click="onCheckedShuttle()">确 定</el-button>
@@ -290,13 +291,12 @@
 </template>
 <script>
 import { SubmitForm, guid, DeleteStatus } from "@/assets/js/common.js";
-import { isInteger } from '@/assets/js/validate.js'
 export default {
   // 数据
   data() {
- var validateName = (rule, value, callback) => {
+    var validateName = (rule, value, callback) => {
       var reg = /^[0-9]*$/;
-      if (!value) {
+      if (!!value || value ==0) {
         if (reg.test(value)) {
           callback();
         } else {
@@ -307,10 +307,10 @@ export default {
       }
     };
     var validateId = (rule, value, callback) => {
-      if (this.editType == "add"||this.id1!=value) {
-        var reg = /^[\u4e00-\u9fa5]+$/;
+      if (this.editType  == "add" || this.name1 !=value) {
+        var reg = /^[A-Za-z0-9_-]+$/;
         if (!!value) {
-          if (!reg.test(value)) {
+          if (reg.test(value)) {
             this.postRequest("/api/" + this.serviceName + "/jrr/dataset/id", {
               id: value
             }).then(result => {
@@ -324,15 +324,17 @@ export default {
             callback(new Error("id不能为中文"));
           }
         } else {
-          callback();
+           callback(new Error("id不能为空"));
         }
-      } 
-      else{
-        callback()
-      }
+      } else {
+           callback();
+        }
+
     };
     return {
       loading: true,
+      name1:"",
+      titles:['未添加','已添加'],
       serviceName: "",
       editType: "add",
       editDialogVisible: false,
@@ -363,11 +365,11 @@ export default {
       addRules: {},
       //校验规则
       editRules: {
-        id: [{ validator: validateId, trigger: "blur" }],
+        id: [{required: true, validator: validateId, trigger: "blur" }],
         moduleId: [{ required: true, message: "请选择模块", trigger: "blur" }],
         name: [{ required: true, message: "请输入名称", trigger: "blur" }],
         // 校验名字不能重复，主要通过validator来指定验证器名称
-        sortNo: [{ required: true, validator: isInteger, trigger: "blur" }],
+        sortNo: [{ required: true, validator: validateName, trigger: "blur" }],
         sqlFrom: [
           { required: true, message: "请输入from的sql语句", trigger: "blur" }
         ]
@@ -516,8 +518,9 @@ export default {
       this.editType = type;
       if (type == "edit") {
         this.form = Object.assign({}, data);
-        this.id1=this.form.id
+        this.name1 = this.form.id;
         delete this.form.createTime;
+        delete this.form.moduleName;
         this.getData();
         this.getIdConlomData();
         this.getIdConditionData();
@@ -527,7 +530,7 @@ export default {
           name: "",
           moduleId: "",
           relationTable: "",
-          sortNo: "100",
+          sortNo: "80",
           sqlSelect: "",
           sqlFrom: "",
           sqlWhereDefault: "",
@@ -552,7 +555,6 @@ export default {
     // 弹框确定
     onSubmit() {
       var that = this;
-      delete this.form.moduleName
       SubmitForm(
         this,
         "form",
@@ -581,9 +583,12 @@ export default {
       );
     },
     clickCurrent(e) {
-      // this.currentRow = e.id;
+      if(!!e){
+      if (!!e.id) {
+        this.currentRow = e.id;
+      }
+       }
     },
-
     // 条件定义编辑
     editCondition(type, data) {
       if (this.$refs.conditionForm) {
@@ -641,6 +646,11 @@ export default {
     },
     // 添加字段
     editCreateTableData() {
+      var data =[];
+      for(var i=0;i<this.colomData.length;i++){
+        data.push(this.colomData[i].fieldId)
+      }
+      this.value = data
       this.dialogAddVisibleData = false;
       if (this.form.relationTable != "") {
         this.getShuttleFrame();
@@ -653,6 +663,7 @@ export default {
     },
     // 新增字段
     addCreateTableField(type, data) {
+
       if (this.$refs.addNameForm) {
         this.$refs.addNameForm.clearValidate();
       }

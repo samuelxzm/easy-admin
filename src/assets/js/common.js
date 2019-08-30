@@ -22,7 +22,7 @@ axios.interceptors.request.use(config => {
 axios.interceptors.response.use((response) => {
     const data = response.data;
     //根据返回的code值来做不同的处理（和后端约定）
-    if (data.code == 0||data.code == -1) {
+    if (data.code == 0) {
         return data.data
     }
     // else if(data.code==-200){
@@ -38,13 +38,17 @@ axios.interceptors.response.use((response) => {
     else if (data.code == -205) {
         // todo
     }
+    else {
+        Message.error({
+            message: data.msg
+        });
+    }
 }, (err) => { // 这里是返回状态码不为200时候的错误处理
     if (err && err.response) {
         switch (err.response.status) {
             case 400:
                 err.message = '请求错误'
                 break
-
             case 401:
                 err.message = '未授权，请登录'
                 break
