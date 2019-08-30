@@ -15,8 +15,7 @@
     >
       <el-table-column type="index" width="50" label="序号" align="center"></el-table-column>
       <el-table-column prop="name" label="名称" width="160"></el-table-column>
-      <el-table-column prop="moduleId" label="模块" width="120"></el-table-column>
-
+      <el-table-column prop="moduleName" label="模块" width="120"></el-table-column>
       <el-table-column prop="description" label="说明"></el-table-column>
       <el-table-column prop="sortNo" label="排序码" width="80"></el-table-column>
       <el-table-column label="操作" width="140" align="center">
@@ -291,12 +290,13 @@
 </template>
 <script>
 import { SubmitForm, guid, DeleteStatus } from "@/assets/js/common.js";
+import { isInteger } from '@/assets/js/validate.js'
 export default {
   // 数据
   data() {
-    var validateName = (rule, value, callback) => {
+ var validateName = (rule, value, callback) => {
       var reg = /^[0-9]*$/;
-      if (!!value) {
+      if (!value) {
         if (reg.test(value)) {
           callback();
         } else {
@@ -307,7 +307,7 @@ export default {
       }
     };
     var validateId = (rule, value, callback) => {
-      if (this.editType == "add") {
+      if (this.editType == "add"||this.id1!=value) {
         var reg = /^[\u4e00-\u9fa5]+$/;
         if (!!value) {
           if (!reg.test(value)) {
@@ -315,24 +315,20 @@ export default {
               id: value
             }).then(result => {
               if (result) {
-                callback(new Error("uuid重复"));
+                callback(new Error("id重复"));
               } else {
                 callback();
               }
             });
           } else {
-            callback(new Error("uuid不能为中文"));
+            callback(new Error("id不能为中文"));
           }
         } else {
           callback();
         }
-      } else {
-        var reg = /^[\u4e00-\u9fa5]+$/;
-        if (reg.test(value)) {
-          callback(new Error("uuid不能为中文"));
-        } else {
-          callback();
-        }
+      } 
+      else{
+        callback()
       }
     };
     return {
@@ -371,7 +367,7 @@ export default {
         moduleId: [{ required: true, message: "请选择模块", trigger: "blur" }],
         name: [{ required: true, message: "请输入名称", trigger: "blur" }],
         // 校验名字不能重复，主要通过validator来指定验证器名称
-        sortNo: [{ required: true, validator: validateName, trigger: "blur" }],
+        sortNo: [{ required: true, validator: isInteger, trigger: "blur" }],
         sqlFrom: [
           { required: true, message: "请输入from的sql语句", trigger: "blur" }
         ]
@@ -454,7 +450,6 @@ export default {
           parentId: this.form.id
         })
         .then(result => {
-          console.log(result);
           that.conditionData = result;
         });
     },
@@ -521,6 +516,7 @@ export default {
       this.editType = type;
       if (type == "edit") {
         this.form = Object.assign({}, data);
+        this.id1=this.form.id
         delete this.form.createTime;
         this.getData();
         this.getIdConlomData();
@@ -556,6 +552,7 @@ export default {
     // 弹框确定
     onSubmit() {
       var that = this;
+      delete this.form.moduleName
       SubmitForm(
         this,
         "form",

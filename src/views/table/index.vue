@@ -9,9 +9,14 @@
         <el-input v-model="formInline.title" placeholder="请输入数据表含义"></el-input>
       </el-form-item>
       <el-form-item label="数据表类型">
-           <el-select v-model="formInline.type">
-                <el-option v-for="item in typeOptions" :key="item.code" :label="item.name" :value="item.code"></el-option>
-              </el-select>
+        <el-select v-model="formInline.type">
+          <el-option
+            v-for="item in typeOptions"
+            :key="item.code"
+            :label="item.name"
+            :value="item.code"
+          ></el-option>
+        </el-select>
         <!-- <el-input v-model="formInline.type" placeholder="请输入数据表类型"></el-input> -->
       </el-form-item>
       <el-form-item>
@@ -33,15 +38,15 @@
       highlight-current-row
       @current-change="clickCurrent"
     >
-          <el-table-column type="index" align="center" width="50" label="序号"></el-table-column>
-          <el-table-column prop="name" label="数据表名称"></el-table-column>
-                <el-table-column prop="title" label="数据表含义"></el-table-column>
+      <el-table-column type="index" align="center" width="50" label="序号"></el-table-column>
+      <el-table-column prop="name" label="数据表名称"></el-table-column>
+      <el-table-column prop="title" label="数据表含义"></el-table-column>
       <el-table-column prop="moduleName" label="模块" width="100"></el-table-column>
       <el-table-column prop="idType" label="id类型"></el-table-column>
       <el-table-column prop="shortName" label="简称"></el-table-column>
       <el-table-column prop="typeName" label="类型"></el-table-column>
       <el-table-column prop="summary" label="简介"></el-table-column>
-            <el-table-column prop="sortNo" label="排序码" width="80"></el-table-column>
+      <el-table-column prop="sortNo" label="排序码" width="80"></el-table-column>
       <el-table-column prop="status" align="center" label="状态" width="80"></el-table-column>
       <el-table-column prop="remarks" label="备注"></el-table-column>
       <el-table-column label="操作" width="140" align="center">
@@ -52,7 +57,7 @@
             plain
             type="primary"
             icon="el-icon-edit"
-           @click.stop="addTableData('edit', scope.row)"
+            @click.stop="addTableData('edit', scope.row)"
           ></el-button>
           <el-button
             type="danger"
@@ -60,8 +65,7 @@
             plain
             icon="el-icon-delete"
             size="small"
-           @click.stop="handleDelete(scope.$index, scope.row)"
-                 
+            @click.stop="handleDelete(scope.$index, scope.row)"
           ></el-button>
         </template>
       </el-table-column>
@@ -75,14 +79,14 @@
               <el-input v-model="form.name" autocomplete="off"></el-input>
             </el-form-item>
 
-<el-form-item label="简称" prop="shortName">
+            <el-form-item label="简称" prop="shortName">
               <el-input v-model="form.shortName" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item label="数据表含义" prop="title">
               <el-input v-model="form.title" autocomplete="off"></el-input>
             </el-form-item>
-       
-                 <el-form-item label="简介" prop="summary">
+
+            <el-form-item label="简介" prop="summary">
               <el-input v-model="form.summary" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item label="排序码" prop="sortNo">
@@ -90,14 +94,13 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-       
             <el-form-item label="id类型" prop="idType" class="type">
               <el-select v-model="form.idType" placeholder="请选择类型">
                 <el-option label="手动录入" value="手动录入"></el-option>
                 <el-option label="自动生成" value="自动生成"></el-option>
               </el-select>
             </el-form-item>
-              <el-form-item label="模块" prop="moduleId">
+            <el-form-item label="模块" prop="moduleId">
               <el-select v-model="form.moduleId">
                 <el-option
                   v-for="item in options"
@@ -118,7 +121,7 @@
                 ></el-option>
               </el-select>
             </el-form-item>
-       
+
             <el-form-item label="状态" prop="status" class="type">
               <el-select v-model="form.status" placeholder="请选择类型">
                 <el-option label="启用" value="1"></el-option>
@@ -146,7 +149,7 @@ export default {
   // 数据
   data() {
     var validateName = (rule, value, callback) => {
-      if (this.name1!=value) {
+      if (this.name1 != value) {
         var reg = /^([a-zA-Z]*_*[a-zA-Z]*)*$/;
         if (!!value) {
           if (reg.test(value)) {
@@ -170,8 +173,8 @@ export default {
       }
     };
     return {
-      loading:true,
-      name1:'',
+      loading: true,
+      name1: "",
       options: [],
       typeOptions: [],
       serviceName: "",
@@ -204,7 +207,7 @@ export default {
         // summary: [{ required: true, message: "请输入简介", trigger: "blur" }],
         sortNo: [
           { required: true, message: "请输入排序码", trigger: "blur" },
-          {  type: "number", message: "排序码必须为数字", trigger: "blur"}
+          { type: "number", message: "排序码必须为数字", trigger: "blur" }
         ]
       },
       currentRow: ""
@@ -256,7 +259,7 @@ export default {
     },
     // 获取数据
     getTableData() {
-      this.loading=true
+      this.loading = true;
       this.getRequest("/api/" + this.serviceName + "/table/select/all").then(
         result => {
           var tables = result.tables;
@@ -294,10 +297,9 @@ export default {
       }
       this.editType = type;
       if (type == "edit") {
-
         this.form = Object.assign({}, data);
-         this.name1=this.form.name
-               this.name1=this.form.name
+        this.name1 = this.form.name;
+        this.name1 = this.form.name;
         delete this.form.createTime;
         delete this.form.moduleName;
         delete this.form.typeName;
@@ -314,7 +316,7 @@ export default {
           summary: "",
           remarks: "",
           status: "1",
-          sortNo:100
+          sortNo: 100
         };
       }
       this.dialogAddVisible = true;
@@ -342,13 +344,11 @@ export default {
       that.dialogAddVisible = false;
     },
     clickCurrent(e) {
-      if(!!e){
-
-     
-      if (!!e.id) {
-        this.currentRow = e.id;
+      if (!!e) {
+        if (!!e.id) {
+          this.currentRow = e.id;
+        }
       }
-       }
     },
     manageField() {
       if (!this.currentRow) {

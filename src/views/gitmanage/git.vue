@@ -42,7 +42,7 @@
 						</el-form-item>
 			
 						<el-form-item label="密码" prop="password">
-							<el-input type="password" v-model="studentForm.password" autocomplete="off"></el-input>
+							<el-input  v-model="studentForm.password" autocomplete="off"></el-input>
 						</el-form-item>
 					</el-col>
 				
@@ -63,7 +63,6 @@
 					<el-row>
 					<el-col :span="24">
 						<el-form-item label="说明" prop="description">
-							<!--<el-input v-model="studentForm.createUser"></el-input>-->
 							<el-input type="textarea" v-model="studentForm.description"></el-input>
 						</el-form-item>
 					</el-col>
@@ -91,11 +90,11 @@
 							if(!result) {
 								callback();
 							} else {
-								callback(new Error("账号重复"));
+								callback(new Error("名称重复"));
 							}
 						});
 					} else {
-						callback(new Error("账号不能为空"));
+						callback(new Error("名称不能为空"));
 					}
 				} else {
 					callback();
@@ -109,7 +108,6 @@
 					name: [{
 						required: true, //是否必填
 						validator: validateName, //判断name是否重复
-						//message: "姓名不能为空", //规则
 						trigger: "blur" //何事件触发
 					}]
 				},

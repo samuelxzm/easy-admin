@@ -6,8 +6,8 @@
     <el-table border :data="tableData" v-loading="loading">
       <el-table-column type="index"  align="center" width="50" label="序号"></el-table-column>
       <el-table-column prop="name" label="名称"></el-table-column>
-      <el-table-column prop="gitName" label="名称（git）"></el-table-column>
-      <el-table-column prop="tinyServiceName" label="名称（微服务）"></el-table-column>
+      <el-table-column prop="gitName" width="100" label="名称（git）"></el-table-column>
+      <el-table-column prop="tinyServiceName" width="100" label="名称（微服务）"></el-table-column>
       <el-table-column prop="projectName" label="项目名称"></el-table-column>
       <el-table-column prop="author" label="作者"></el-table-column>
       <el-table-column prop="description" label="说明"></el-table-column>
@@ -171,11 +171,11 @@ export default {
             if (!result) {
               callback();
             } else {
-              callback(new Error("账号重复"));
+              callback(new Error("名称重复"));
             }
           });
         } else {
-          callback(new Error("账号不能为空"));
+          callback(new Error("名称不能为空"));
         }
       } else {
         callback();
@@ -190,7 +190,6 @@ export default {
           {
             required: true, //是否必填
             validator: validateName,
-            //message: "姓名不能为空", //规则
             trigger: "blur" //何事件触发
           }
         ]

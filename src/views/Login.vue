@@ -29,12 +29,18 @@ export default {
     };
   },
   mounted() {
+
     let name = Cookies.get("name");
     let password = Cookies.get("password");
     if (!!name && !!password) {
       this.form.username = name;
       this.form.password = password;
     }
+  },
+  created(){
+    this.getRequest('/api/ts-verity/login/fromLogin').then(result=>{
+      console.log(result)
+    })
   },
   methods: {
     onSubmit() {
