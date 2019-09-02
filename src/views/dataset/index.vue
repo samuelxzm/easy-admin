@@ -413,6 +413,8 @@ export default {
       that.postRequest("/api/ts-dataset/dataset/select/all").then(result => {
         that.tableData = result;
         that.loading = false;
+      }).catch(err=>{
+        console.log("dfdf",err)
       });
     },
     // 获取模块

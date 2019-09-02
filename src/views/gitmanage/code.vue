@@ -164,10 +164,7 @@ export default {
         if (!!value) {
           this.postRequest(
             "/api/" + this.serviceName + "/jrr/codeProject/name",
-            {
-              name: value
-            }
-          ).then(result => {
+            {name: value}).then(result => {
             if (!result) {
               callback();
             } else {
