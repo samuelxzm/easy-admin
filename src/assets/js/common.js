@@ -1,9 +1,7 @@
 import axios from 'axios'
 import FileSaver from "file-saver"
 import XLSX from "xlsx"
-import {
-    Message
-} from 'element-ui'
+import {Message} from 'element-ui'
 // axios.defaults.withCredentials = true // 带cookie请求
 axios.defaults.timeout = 5000 //  请求的超时时间 5000ms
 // axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
@@ -30,13 +28,11 @@ axios.interceptors.response.use((response) => {
     //         location.replace(`/login`)
     //     }
     // }
-    else if (data.code == -205) {
-        // todo
-    }
     else {
         Message.error({
             message: data.msg
         });
+        return Promise.reject(data);
     }
 }, (err) => { // 这里是返回状态码不为200时候的错误处理
     if (err.message.includes('timeout')) {   // 判断请求异常信息中是否含有超时timeout字符串
@@ -45,59 +41,58 @@ axios.interceptors.response.use((response) => {
         });
         return Promise.reject(err);          // reject这个错误信息
     }
-    return Promise.reject(err);
-    // if (err && err.response) {
-    //     switch (err.response.status) {
-    //         case 400:
-    //             err.message = '请求错误'
-    //             break
-    //         case 401:
-    //             err.message = '未授权，请登录'
-    //             break
+    if (err && err.response) {
+        switch (err.response.status) {
+            case 400:
+                err.message = '请求错误'
+                break
+            case 401:
+                err.message = '未授权，请登录'
+                break
 
-    //         case 403:
-    //             err.message = '拒绝访问'
-    //             break
+            case 403:
+                err.message = '拒绝访问'
+                break
 
-    //         case 404:
-    //             err.message = `请求地址出错: ${err.response.config.url}`
-    //             break
+            case 404:
+                err.message = `请求地址出错: ${err.response.config.url}`
+                break
 
-    //         case 408:
-    //             err.message = '请求超时'
-    //             break
+            case 408:
+                err.message = '请求超时'
+                break
 
-    //         case 500:
-    //             err.message = '服务器内部错误'
-    //             break
+            case 500:
+                err.message = '服务器内部错误'
+                break
 
-    //         case 501:
-    //             err.message = '服务未实现'
-    //             break
+            case 501:
+                err.message = '服务未实现'
+                break
 
-    //         case 502:
-    //             err.message = '网关错误'
-    //             break
+            case 502:
+                err.message = '网关错误'
+                break
 
-    //         case 503:
-    //             err.message = '服务不可用'
-    //             break
+            case 503:
+                err.message = '服务不可用'
+                break
 
-    //         case 504:
-    //             err.message = '网关超时'
-    //             break
+            case 504:
+                err.message = '网关超时'
+                break
 
-    //         case 505:
-    //             err.message = 'HTTP版本不受支持'
-    //             break
+            case 505:
+                err.message = 'HTTP版本不受支持'
+                break
 
-    //         default:
-    //     }
-    //     Message.error({
-    //         message: err.message
-    //     });
-    // }
-    // return Promise.reject(err)
+            default:
+        }
+        Message.error({
+            message: err.message
+        });
+    }
+    return Promise.reject(err)
 })
 axios.install = (Vue) => {
     Vue.prototype.$axios = axios
@@ -110,7 +105,7 @@ axios.install = (Vue) => {
  */
 
 
-export const postRequest = (url, data) => {
+export const postRequest = ({ url = '', data = {}, success = '', fail = '' }) => {
     return axios({
         method: 'post',
         url: `${url}`,
@@ -118,9 +113,16 @@ export const postRequest = (url, data) => {
         headers: {
             'Content-Type': 'application/json'
         }
-    });
+    })
+        .then(result => {
+            if (success) success(result)
+        })
+        .catch(err => {
+            if (fail) fail(err)
+        });
 }
-export const getRequest = (url, params) => {
+export const getRequest = ({ url = '', params = '', success = '', fail = '' }) => {
+
     return axios({
         method: 'get',
         url: `${url}`,
@@ -128,7 +130,13 @@ export const getRequest = (url, params) => {
         headers: {
             'Content-type': 'application/x-www-form-urlencoded'
         }
-    });
+    })
+        .then(result => {
+            if (success) success(result)
+        })
+        .catch(err => {
+            if (fail) fail(err)
+        });
 }
 /**
  * @description
@@ -232,7 +240,7 @@ function ExportExcel(id, fileName) {
 /**
  * @description
  * 更改状态为删除
- *  适用于url格式为
+ * 注：适用于url格式为
  * 1.修改：/xxx.../:type?recordid=xxx
  * 2.增加：/xxx.../:type
  * @param {Object}  vim vue实例
