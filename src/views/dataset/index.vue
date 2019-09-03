@@ -6,6 +6,7 @@
     </div>
     <!-- 数据集表格 -->
     <el-table
+    row-class-name="table_tiny" 
       border
       :data="tableData"
       style="width: 100%;"
@@ -137,7 +138,7 @@
           <div class="add_btn">
             <el-button size="small" type="primary" @click="editCondition('add')">增加</el-button>
           </div>
-          <el-table :data="conditionData" border>
+          <el-table row-class-name="table_tiny" max-height="580px"  :data="conditionData" border>
             <el-table-column type="index" width="50" label="序号" align="center"></el-table-column>
             <el-table-column property="fieldName" label="字段名" width="120"></el-table-column>
             <el-table-column property="conditionType" label="条件类型" width="120"></el-table-column>
@@ -171,7 +172,7 @@
             <el-button size="small" type="primary" @click="editCreateTableData()">添加字段</el-button>
             <el-button size="small" type="primary" @click="addCreateTableField('add')">新增字段</el-button>
           </div>
-          <el-table :data="colomData" border>
+          <el-table row-class-name="table_tiny" max-height="580px" :data="colomData" border>
             <el-table-column type="index" width="50" label="序号" align="center"></el-table-column>
             <el-table-column property="alias" label="别名" width="120"></el-table-column>
             <el-table-column property="fieldName" label="字段名" width="120"></el-table-column>

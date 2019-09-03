@@ -1,10 +1,27 @@
 <template>
   <el-card style="min-height:100%;box-sizing:border-box;border-radius:0;">
+    <el-form :inline="true" :model="formLine" size="small">
+      <el-form-item label="关键字">
+        <el-input v-model="formLine.keyword" placeholder="请输入关键字"></el-input>
+      </el-form-item>
+      <!-- <el-form-item label="姓名">
+				<el-input v-model="formLine.name" placeholder="请输入姓名"></el-input>
+      </el-form-item>-->
+      <el-form-item label="状态">
+        <el-select v-model="formLine.status" placeholder="请选择" style="width: 100px;">
+          <el-option label="启用" :value="1"></el-option>
+          <el-option label="停用" :value="0"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" icon="el-icon-search" @click="getData"></el-button>
+      </el-form-item>
+    </el-form>
     <div class="add_btn">
       <el-button type="primary" size="small" @click="addSubmit('add')">增加</el-button>
     </div>
-    <el-table row-class-name="table_tiny" border :data="tableData" v-loading="loading">
-      <el-table-column type="index"  align="center" width="50" label="序号"></el-table-column>
+    <el-table border :data="tableData" ref="table">
+      <el-table-column type="index" align="center" width="50" label="序号"></el-table-column>
       <el-table-column prop="name" label="名称"></el-table-column>
       <el-table-column prop="gitName" width="140" label="名称（git）"></el-table-column>
       <el-table-column prop="tinyServiceName" width="140" label="名称（微服务）"></el-table-column>
@@ -164,7 +181,8 @@ export default {
         if (!!value) {
           this.postRequest(
             "/api/" + this.serviceName + "/jrr/codeProject/name",
-            {name: value}).then(result => {
+            { name: value }
+          ).then(result => {
             if (!result) {
               callback();
             } else {
@@ -179,7 +197,7 @@ export default {
       }
     };
     return {
-      name1:'',
+      name1: "",
       loading: true,
       // 校验规则
       rules: {
@@ -199,23 +217,45 @@ export default {
       tableData: [],
       GitTypeOption: [],
       GitMoldOption: [],
-      value: ""
+      value: "",
+      formLine: {
+        keyword: "",
+        status: ""
+      }
     };
   },
   created() {
     this.serviceName = this.$router.currentRoute.meta.serviceName;
-    this.getData();
     this.getGitType();
     this.getGitMold();
   },
-
+  mounted() {
+    this.getData();
+  },
   methods: {
     // 获取数据
     getData() {
-      this.loading = true;
-      this.getRequest("/api/ts-common/gar/codeProject").then(result => {
-        this.tableData = result;
-        this.loading = false;
+      const loading = this.$loading({
+        lock: true,
+        text: "加载中",
+        target: document.querySelector(".el-table")
+      });
+      console.log(loading);
+      loading.close();
+      console.log(loading);
+      this.postRequest("/api/common-dataset/getds/code", {
+        orderBy: "createTime desc",
+        condition: {
+          "name,description,author": this.formLine.keyword,
+          type: "9E3ADA6B-180C-4332-BF4F-97B741E33FC7,1",
+          status: "" + this.formLine.status
+        },
+        column: "name,id,gitName,status,packageName,projectName,sortNo,tinyServiceName,author,description",
+        pageSize: "10",
+        pageNumber: "1",
+        needTotalRow: "1"
+      }).then(result => {
+        this.tableData = result.list;
       });
     },
     // 取消添加
@@ -311,12 +351,9 @@ export default {
   }
 };
 </script>
-<style>
+<style scoped>
 .add_btn {
   float: right;
   margin-bottom: 10px;
-}
-.table_tiny>td{
-padding:5px 0;
 }
 </style>

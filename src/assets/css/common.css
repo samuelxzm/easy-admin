@@ -42,3 +42,7 @@
 .sidemenu-scrollbar__wrap{
     margin-right: -18px !important;
 }
+
+.table_tiny>td{
+  padding:5px 0;
+  }

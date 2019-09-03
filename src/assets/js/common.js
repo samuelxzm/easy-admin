@@ -153,6 +153,7 @@ export const getRequest = (url, params, success) => {
 function SubmitForm(vim, formName, formDataKey, type, addUrl, editUrl, callback) {
     let that = vim;
     var data = Object.assign({}, that[formDataKey])
+    console.log( that.$refs[formName])
     that.$refs[formName].validate(function (valid) {
         if (valid) {
             if (type == "add") {

@@ -20,7 +20,7 @@ export const constantRoutes = [
     component: () => import('@/views/table/index.vue')
   },
   {
-    path: '/module',
+    path: '/index',
     name: '模块',
     component: () => import('@/views/module/index.vue')
   }

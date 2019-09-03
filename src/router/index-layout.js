@@ -31,9 +31,9 @@ export const constantRoutes = [
       {
         path: 'indexmanage',
         name: '字段管理',
-        type:'hidden',
+        type:'inner',
         meta:{serviceName:"ts-table"},
-        component: () => import('@/views/table/indexmanage.vue')
+        component: () => import('@/views/menusmanage/index.vue')
       }
     ]
   }
@@ -45,10 +45,5 @@ const createRouter = () => new Router({
 })
 global.antRouter=constantRoutes
 const router = createRouter()
-// Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
-// export function resetRouter() {
-//   const newRouter = createRouter()
-//   router.matcher = newRouter.matcher // reset router
-// }
 
 export default router
