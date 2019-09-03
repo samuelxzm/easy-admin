@@ -13,7 +13,6 @@
 </template>
 
 <script>
-// import { addClass, removeClass } from '@/utils'
 import Settings from  './Settings'
 export default {
   name: 'RightPanel',

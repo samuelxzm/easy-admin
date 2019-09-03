@@ -27,7 +27,6 @@
 </template>
 
 <script>
-import Cookies from "js-cookie";
 export default {
   data() {
     return {
@@ -84,7 +83,7 @@ export default {
   methods: {
     projectChange(e) {
       this.postRequest("/api/ts-user/projects/change", { id: e }).then(
-        result => {
+       () => {
           location.reload();
         }
       );

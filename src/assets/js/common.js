@@ -1,12 +1,9 @@
 import axios from 'axios'
 import FileSaver from "file-saver"
 import XLSX from "xlsx"
-import qs from 'qs'//引入QS包装data数据
 import {
-    Message,
-    MessageBox
+    Message
 } from 'element-ui'
-import { fail } from 'assert';
 // axios.defaults.withCredentials = true // 带cookie请求
 axios.defaults.timeout = 5000 //  请求的超时时间 5000ms
 // axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
@@ -43,7 +40,6 @@ axios.interceptors.response.use((response) => {
     }
 }, (err) => { // 这里是返回状态码不为200时候的错误处理
     if (err.message.includes('timeout')) {   // 判断请求异常信息中是否含有超时timeout字符串
-        console.log("连接超时", err);
         Message.error({
             message: err.message
         });
@@ -124,7 +120,7 @@ export const postRequest = (url, data) => {
         }
     });
 }
-export const getRequest = (url, params, success) => {
+export const getRequest = (url, params) => {
     return axios({
         method: 'get',
         url: `${url}`,
@@ -136,10 +132,10 @@ export const getRequest = (url, params, success) => {
 }
 /**
  * @description
- *  提交表单--增加和删除
- *  注：适用于url格式为
- *         1.修改：/xxx.../:type?recordid=xxx
- *         2.增加：/xxx.../:type
+ * 提交表单--增加和删除
+ * 注：适用于url格式为
+ * 1.修改：/xxx.../:type?recordid=xxx
+ * 2.增加：/xxx.../:type
  * @param {Object} vim vue实例
  * @param {String}  formName 表单ref的名字
  * @param {String}  formDataKey 表单绑定数据的key名
@@ -153,7 +149,6 @@ export const getRequest = (url, params, success) => {
 function SubmitForm(vim, formName, formDataKey, type, addUrl, editUrl, callback) {
     let that = vim;
     var data = Object.assign({}, that[formDataKey])
-    console.log( that.$refs[formName])
     that.$refs[formName].validate(function (valid) {
         if (valid) {
             if (type == "add") {
@@ -207,7 +202,7 @@ function SubmitForm(vim, formName, formDataKey, type, addUrl, editUrl, callback)
 }
 /**
  * @description
- *  导出数据为Excel
+ * 导出数据为Excel
  * @param {String}  id 导出对象的ID
  * @param {String}  fileName 导出文件的文件名
  * @author wy 20181031
@@ -230,16 +225,16 @@ function ExportExcel(id, fileName) {
             fileName
         );
     } catch (e) {
-        if (typeof console !== "undefined") console.log(e, wbout);
+        if (typeof console !== "undefined") ;
     }
     return wbout;
 }
 /**
  * @description
- *  更改状态为删除
- *  注：适用于url格式为
- *         1.修改：/xxx.../:type?recordid=xxx
- *         2.增加：/xxx.../:type
+ * 更改状态为删除
+ *  适用于url格式为
+ * 1.修改：/xxx.../:type?recordid=xxx
+ * 2.增加：/xxx.../:type
  * @param {Object}  vim vue实例
  * @param {String}  tableName 数据所在表名
  * @param {String}  itemId 要删除数据的id
