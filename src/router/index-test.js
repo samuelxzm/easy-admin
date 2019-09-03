@@ -10,19 +10,9 @@ export const constantRoutes = [
     component: () => import('@/views/Login')
   },
   {
-    path: '/user',
+    path: '/dashboard',
     name: '用户',
-    component: () => import('@/views/user/index.vue')
-  },
-  {
-    path: '/table',
-    name: '表格',
-    component: () => import('@/views/table/index.vue')
-  },
-  {
-    path: '/index',
-    name: '模块',
-    component: () => import('@/views/module/index.vue')
+    component: () => import('@/views/dashboard/index.vue')
   }
 ]
 const createRouter = () => new Router({

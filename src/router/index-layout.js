@@ -11,29 +11,15 @@ export const constantRoutes = [
   },
   {
     path: '/table',
-    name: '用户',
+    name: '首页lay',
     component: () => import('@/components/Layout'),
     children: [
       {
         path: 'index',
-        name: '表格',
+        name: '首页',
         iconCls:'table',
         meta:{serviceName:"ts-table"},
-        component: () => import('@/views/table/index.vue')
-      },
-      {
-        path: 'fieldmanage',
-        name: '索引管理',
-        type:'hidden',
-        meta:{serviceName:"ts-table"},
-        component: () => import('@/views/table/fieldmanage.vue')
-      },
-      {
-        path: 'indexmanage',
-        name: '字段管理',
-        type:'inner',
-        meta:{serviceName:"ts-table"},
-        component: () => import('@/views/menusmanage/index.vue')
+        component: () => import('@/views/dashboard/index.vue')
       }
     ]
   }
