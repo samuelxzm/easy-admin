@@ -34,18 +34,17 @@ export function isInteger(rule, value, callback) {
 }
 // 内网ip校验
 export function isCheckIp(rule, value, callback) {
-    let reg = /^((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})(\.((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})){3}$/;
-    if (!value) {
+  let reg = /^((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})(\.((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})){3}$/;
+  if (!value) {
     return callback(new Error("请输入容器ip"));
-    } else {
+  } else {
     let ip = reg.test(value);
     if (!ip) {
-    return callback(new Error("请输入正确的ip地址"));
+      return callback(new Error("请输入正确的ip地址"));
     } else {
-    callback();
+      callback();
     }
-    }
-    
+  }
 }
 
 

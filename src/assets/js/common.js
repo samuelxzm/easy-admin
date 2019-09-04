@@ -154,19 +154,17 @@ export const getRequest = ({ url = '', params = '', success = '', fail = '' }) =
  * @author wy 20181031
  * @version V0.0.1
  */
-function SubmitForm(vim, formName, formDataKey, type, addUrl, editUrl, callback) {
-    let that = vim;
-    var data = Object.assign({}, that[formDataKey])
+function SubmitForm({ formName, type, addUrl = '', editUrl = '', submitsuccess = null, submitfail = null }) {
+    let that = this;
     that.$refs[formName].validate(function (valid) {
         if (valid) {
+            let data = {}
+            that.$refs[formName].$data.fields.forEach(e => {
+                data[e.labelFor] = e.fieldValue
+            })
             if (type == "add") {
-                that.$axios
-                    .post(addUrl, data, {
-                        headers: {
-                            "Content-Type": "application/json"
-                        }
-                    })
-                    .then(result => {
+                postRequest({
+                    url: addUrl, data: data, success: (result) => {
                         if (result) {
                             if (result == "error") {
                                 that.$message.error("添加失败");
@@ -177,37 +175,91 @@ function SubmitForm(vim, formName, formDataKey, type, addUrl, editUrl, callback)
                                     type: "success"
                                 });
                             }
-                            callback(result);
+                            if (submitsuccess) submitsuccess(result);
                         }
                         else {
-                            that.$message.error("增加失败");
+                            if (submitfail) submitfail(result);
+                            else that.$message.error("增加失败");
                         }
-                    });
+                    }
+                })
             } else {
                 // //修改
-                that.$axios
-                    .post(editUrl, data, {
-                        headers: {
-                            "Content-Type": "application/json"
-                        }
-                    })
-                    .then(result => {
+                postRequest({
+                    url: editUrl, data: data, success: (result) => {
                         if (result) {
                             that.$message({
                                 message: "修改成功！",
                                 type: "success"
                             });
-                            return callback(result);
-                        } else {
-                            that.$message.error("修改失败");
+                            if (submitsuccess) callback(submitsuccess);
                         }
-                    });
+                        else {
+                            if (submitfail) submitfail(result);
+                            else that.$message.error("修改失败");
+                        }
+                    }
+                })
             }
         } else {
             return false;
         }
     });
 }
+// function SubmitForm(vim, formName, formDataKey, type, addUrl, editUrl, callback) {
+//     let that = vim;
+//     var data = Object.assign({}, that[formDataKey])
+//     that.$refs[formName].validate(function (valid) {
+//         if (valid) {
+//             if (type == "add") {
+//                 that.$axios
+//                     .post(addUrl, data, {
+//                         headers: {
+//                             "Content-Type": "application/json"
+//                         }
+//                     })
+//                     .then(result => {
+//                         if (result) {
+//                             if (result == "error") {
+//                                 that.$message.error("添加失败");
+//                             }
+//                             else {
+//                                 that.$message({
+//                                     message: "添加成功！",
+//                                     type: "success"
+//                                 });
+//                             }
+//                             callback(result);
+//                         }
+//                         else {
+//                             that.$message.error("增加失败");
+//                         }
+//                     });
+//             } else {
+//                 // //修改
+//                 that.$axios
+//                     .post(editUrl, data, {
+//                         headers: {
+//                             "Content-Type": "application/json"
+//                         }
+//                     })
+//                     .then(result => {
+//                         if (result) {
+//                             that.$message({
+//                                 message: "修改成功！",
+//                                 type: "success"
+//                             });
+//                             return callback(result);
+//                         } else {
+//                             that.$message.error("修改失败");
+//                         }
+//                     });
+//             }
+//         } else {
+//             return false;
+//         }
+//     });
+// }
 /**
  * @description
  * 导出数据为Excel
@@ -250,8 +302,9 @@ function ExportExcel(id, fileName) {
  * @author xzm 20181217
  * @version V0.0.1
  */
-function DeleteStatus(vim, deleteUrl, data, callback) {
-    var that = vim;
+
+function DeleteStatus({deleteUrl, data, deletesuccess=null,deletefail=null}) {
+    let that = this
     that.$confirm('是否确认删除?', '提示', {
         cancelButtonText: '取消',
         confirmButtonText: '确定',
@@ -259,22 +312,49 @@ function DeleteStatus(vim, deleteUrl, data, callback) {
         callback: function (action) {
             if (action == "confirm") {
                 //调用删除接口删除
-                that.postRequest(deleteUrl, data).then(isdelete => {
-                    if (isdelete) {
-                        that.$message({
-                            message: '删除成功！',
-                            type: 'success'
-                        });
-                        return callback()
-                    } else {
-                        that.$message.error('删除失败');
+                postRequest({
+                    url: deleteUrl, data: data, success: (result) => {
+                        if (result) {
+                            that.$message({
+                                message: '删除成功！',
+                                type: 'success'
+                            });
+                            if(deletesuccess)return deletesuccess()
+                        } else {
+                            if(deletefail)return deletefail()
+                            else that.$message.error('删除失败');
+                        }
                     }
-                });
-
+                })
             }
         }
     })
 }
+// function DeleteStatus(vim, deleteUrl, data, callback) {
+//     var that = vim;
+//     that.$confirm('是否确认删除?', '提示', {
+//         cancelButtonText: '取消',
+//         confirmButtonText: '确定',
+//         type: 'warning',
+//         callback: function (action) {
+//             if (action == "confirm") {
+//                 //调用删除接口删除
+//                 that.postRequest(deleteUrl, data).then(isdelete => {
+//                     if (isdelete) {
+//                         that.$message({
+//                             message: '删除成功！',
+//                             type: 'success'
+//                         });
+//                         return callback()
+//                     } else {
+//                         that.$message.error('删除失败');
+//                     }
+//                 });
+
+//             }
+//         }
+//     })
+// }
 
 function formatDate(date, fmt) {
     if (/(y+)/.test(fmt)) {
