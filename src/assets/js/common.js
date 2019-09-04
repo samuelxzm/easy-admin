@@ -295,7 +295,6 @@ function ExportExcel(id, fileName) {
  * 注：适用于url格式为
  * 1.修改：/xxx.../:type?recordid=xxx
  * 2.增加：/xxx.../:type
- * @param {Object}  vim vue实例
  * @param {String}  tableName 数据所在表名
  * @param {String}  itemId 要删除数据的id
  * @return {function}  callback 回调函数
