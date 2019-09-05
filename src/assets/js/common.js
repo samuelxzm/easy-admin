@@ -192,7 +192,7 @@ function SubmitForm({ formName, type, addUrl = '', editUrl = '', submitsuccess =
                                 message: "修改成功！",
                                 type: "success"
                             });
-                            if (submitsuccess) callback(submitsuccess);
+                            if (submitsuccess) submitsuccess(result);
                         }
                         else {
                             if (submitfail) submitfail(result);

@@ -1,5 +1,11 @@
 <template>
-  <el-menu-item v-if="routerhaschildren.length<=1" :index="basePath+'/'+routerhaschildren[0].path">
+<!-- <el-menu-item v-if="!routerhaschildren.children" :index="basePath+'/'+routerhaschildren[0].path">
+    <template>
+      <svg-icon :icon-class="routerhaschildren[0].iconCls" />
+      <span slot="title">{{ routerhaschildren[0].name }}</span>
+    </template>
+  </el-menu-item> -->
+  <el-menu-item v-if="!!router.children&&routerhaschildren.length<=1" :index="basePath+'/'+routerhaschildren[0].path">
     <template>
       <svg-icon :icon-class="routerhaschildren[0].iconCls" />
       <span slot="title">{{ routerhaschildren[0].name }}</span>
@@ -10,7 +16,7 @@
     :router="router.children[0]"
     :base-path="router.path + '/' +routerhaschildren[0].path"
   /> -->
-  <el-submenu v-else :index="basePath + '/' + router.path">
+  <el-submenu v-else-if="!!router.children&&routerhaschildren.length>1" :index="basePath + '/' + router.path">
     <template slot="title">
       <svg-icon :icon-class="router.iconCls" />
       <span v-if="router.name">{{ router.name }}</span>
@@ -44,8 +50,13 @@ export default {
   },
   computed:{
     routerhaschildren(){
-      console.log(this.router.children.filter(item => item.type!='hidden' ))
+      if(this.router.children){
       return this.router.children.filter(item => item.type!='hidden' )
+      }
+      else{
+        return this.router
+      }
+
     }
   },
   created() {}
