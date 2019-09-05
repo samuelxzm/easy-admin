@@ -12,7 +12,6 @@ const state = {
 const mutations = {
   CHANGE_SETTING: (state, { key, value }) => {
     if (state.hasOwnProperty(key)) {
-      console.log(key)
       state[key] = value
       if (value) {
         Cookies.set(key, 1)

@@ -135,11 +135,8 @@ export default {
       });
     },
     reFresh() {
-      let that = this;
       let view = this.$router.currentRoute;
-
-
-            this.$store.dispatch('tagsView/delCachedView', view).then(() => {
+      this.$store.dispatch('tagsView/delCachedView', view).then(() => {
         const { fullPath } = view
         this.$nextTick(() => {
           this.$router.replace({
@@ -157,7 +154,7 @@ export default {
     },
     closeAllTags() {
       let view = this.$router.currentRoute;
-      this.$store.dispatch("tagsView/delAllViews").then(({ visitedViews }) => {
+      this.$store.dispatch("tagsView/delAllViews").then(() => {
         if (this.affixTags.some(tag => tag.path === view.path)) {
           return;
         }
@@ -166,9 +163,9 @@ export default {
     },
     loginOut(){
       let that=this
-    this.getRequest('/api/ts-verity/login/loginOut').then(result=>{
+    this.getRequest({url:'/api/ts-verity/login/loginOut',success:()=>{
 that.$router.push('/login')
-    })
+    }})
     }
   }
 };

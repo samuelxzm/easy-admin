@@ -90,7 +90,7 @@ export default {
       this.postRequest({
         url:"/api/ts-user/projects/change",
         data:{id: e },
-        success:result=>{
+        success:()=>{
           location.reload();
         } 
     })
