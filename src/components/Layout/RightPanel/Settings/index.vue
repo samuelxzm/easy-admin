@@ -71,23 +71,30 @@ export default {
   },
   created() {
     let that = this;
-    this.getRequest("/api/ts-user/projects/get/all").then(result => {
-      that.projectList = result;
+    this.getRequest({
+      url:"/api/ts-user/projects/get/all",
+      success:result=>{
+        that.projectList = result;
+      }
+      
     });
-    this.getRequest("/api/ts-user/projects/get/default/project/id").then(
-      result => {
+    this.getRequest({
+      url:"/api/ts-user/projects/get/default/project/id",
+      success:result=>{
         that.projectId = result;
       }
-    );
+      })
   },
   methods: {
     projectChange(e) {
-      this.postRequest("/api/ts-user/projects/change", { id: e }).then(
-       () => {
+      this.postRequest({
+        url:"/api/ts-user/projects/change",
+        data:{id: e },
+        success:result=>{
           location.reload();
-        }
-      );
-    }
+        } 
+    })
+  }
   }
 };
 </script>

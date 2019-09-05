@@ -1,5 +1,5 @@
 <template>
-  <el-menu-item v-if="routerhaschildren.length==1" :index="basePath+'/'+routerhaschildren[0].path">
+  <el-menu-item v-if="routerhaschildren.length<=1" :index="basePath+'/'+routerhaschildren[0].path">
     <template>
       <svg-icon :icon-class="routerhaschildren[0].iconCls" />
       <span slot="title">{{ routerhaschildren[0].name }}</span>
@@ -21,12 +21,14 @@
       :router="item"
       :base-path="basePath + '/' + item.path"
     /> -->
-      <el-menu-item v-for="item in router.children" :key="item.id" :index="basePath+'/'+item.path">
+    <template  v-for="item in router.children">
+      <el-menu-item v-if="item.type!='hidden'" :index="basePath+'/'+item.path"  :key="item.id">
     <template>
       <svg-icon :icon-class="item.iconCls" />
       <span slot="title">{{ item.name }}</span>
     </template>
   </el-menu-item>
+    </template>
 
   </el-submenu>
 </template>
@@ -42,6 +44,7 @@ export default {
   },
   computed:{
     routerhaschildren(){
+      console.log(this.router.children.filter(item => item.type!='hidden' ))
       return this.router.children.filter(item => item.type!='hidden' )
     }
   },
