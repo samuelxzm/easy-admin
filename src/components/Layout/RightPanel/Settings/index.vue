@@ -72,7 +72,7 @@ export default {
   created() {
     let that = this;
     this.getRequest({
-      url:"/api/ts-user/projects/get/all",
+      url:"/api/ts-common/gar/8c956737-d1ec-188a-4131-8b5b86ceb989",
       success:result=>{
         that.projectList = result;
       }
