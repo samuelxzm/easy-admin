@@ -27,6 +27,7 @@
 </template>
 
 <script>
+import Cookies from "js-cookie";
 export default {
   data() {
     return {
@@ -71,30 +72,23 @@ export default {
   },
   created() {
     let that = this;
-    this.getRequest({
-      url:"/api/ts-common/gar/8c956737-d1ec-188a-4131-8b5b86ceb989",
-      success:result=>{
-        that.projectList = result;
-      }
-      
+    this.getRequest("/api/ts-user/projects/get/all").then(result => {
+      that.projectList = result;
     });
-    this.getRequest({
-      url:"/api/ts-user/projects/get/default/project/id",
-      success:result=>{
+    this.getRequest("/api/ts-user/projects/get/default/project/id").then(
+      result => {
         that.projectId = result;
       }
-      })
+    );
   },
   methods: {
     projectChange(e) {
-      this.postRequest({
-        url:"/api/ts-user/projects/change",
-        data:{id: e },
-        success:()=>{
+      this.postRequest("/api/ts-user/projects/change", { id: e }).then(
+        result => {
           location.reload();
-        } 
-    })
-  }
+        }
+      );
+    }
   }
 };
 </script>

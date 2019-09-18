@@ -144,7 +144,7 @@ export default {
           }
         });
     },
-    toLastView(visitedViews) {
+    toLastView(visitedViews, view) {
       const latestView = visitedViews.slice(-1)[0];
       if (latestView) {
         this.$router.push(latestView);
@@ -155,7 +155,8 @@ export default {
         this.$router.push("/");
       }
     },
-    openMenu(tag) {
+    openMenu(tag, e) {
+
       this.selectedTag = tag;
     }
   }

@@ -15,7 +15,7 @@
       <svg-icon icon-class="refresh" />
     </el-button>
     <el-button v-if="defaultSetting.fullScreen" size="medium" type="text" @click="screenFull()">
-      <svg-icon :icon-class="isFullscreen ? 'unfullScreen' : 'fullScreen'" />
+      <svg-icon :icon-class="isFullscreen ? 'fullScreen' : 'fullScreen'" />
     </el-button>
     <el-button v-if="defaultSetting.openAlone" size="medium" type="text" @click="openAlone()">
       <svg-icon icon-class="show" />
@@ -30,8 +30,7 @@
       v-if="defaultSetting.showSettings"
       size="medium"
       style="margin-left:15px;align-items: center;display: flex;"
-      :hide-on-click="false"
-      trigger="click"
+      :hide-on-click='false'
     >
       <el-button
         style="color:#4b4b4b;font-size: 20px;"
@@ -61,7 +60,7 @@
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item icon="el-icon-s-custom">个人中心</el-dropdown-item>
         <el-dropdown-item icon="el-icon-key">修改密码</el-dropdown-item>
-        <el-dropdown-item divided icon="el-icon-switch-button" @click.native="loginOut">退出登录</el-dropdown-item>
+        <el-dropdown-item divided icon="el-icon-switch-button">退出登录</el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
   </div>
@@ -74,6 +73,7 @@ import settings from "@/settings.js";
 import settingPlane from "../../RightPanel/Settings/index";
 export default {
   components: {
+
     settingPlane
   },
   data() {
@@ -119,54 +119,34 @@ export default {
         screenfull.off("change", this.change);
       }
     },
-    reloadRouter(path) {
-      this.$router.push({
-        name: "redirect",
-        params: {
-          path: path
-        }
-      });
-
-      this.$router.push({
-        path: "redirect",
-        query: {
-          path: path
-        }
-      });
-    },
-    reFresh() {
-      let view = this.$router.currentRoute;
-      this.$store.dispatch('tagsView/delCachedView', view).then(() => {
+    reFresh(){
+      let view=this.$router.currentRoute
+            this.$store.dispatch('tagsView/delCachedView',view).then(() => {
         const { fullPath } = view
+  
         this.$nextTick(() => {
           this.$router.replace({
-            path: '/redirect' + fullPath
+            path: fullPath
           })
         })
       })
     },
-    closeOthersTags() {
-      let view = this.$router.currentRoute;
-      this.$router.push(view);
-      this.$store.dispatch("tagsView/delOthersViews", view).then(() => {
+        closeOthersTags() {
+            let view=this.$router.currentRoute
+      this.$router.push(view)
+      this.$store.dispatch('tagsView/delOthersViews', view).then(() => {
         // this.moveToCurrentTag()
-      });
+      })
     },
     closeAllTags() {
-      let view = this.$router.currentRoute;
-      this.$store.dispatch("tagsView/delAllViews").then(() => {
+       let view=this.$router.currentRoute
+      this.$store.dispatch('tagsView/delAllViews').then(({ visitedViews }) => {
         if (this.affixTags.some(tag => tag.path === view.path)) {
-          return;
+          return
         }
         // this.toLastView(visitedViews, view)
-      });
+      })
     },
-    loginOut(){
-      let that=this
-    this.getRequest({url:'/api/ts-verity/login/loginOut',success:()=>{
-that.$router.push('/login')
-    }})
-    }
   }
 };
 </script>

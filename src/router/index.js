@@ -1,20 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Layout from '@/components/Layout'
+
 Vue.use(Router)
 
 export const constantRoutes = [
-  {
-    path: '/redirect',
-    component: Layout,
-    hidden: true,
-    children: [
-      {
-        path: '/redirect/:path*',
-        component: () => import('@/views/redirect/index')
-      }
-    ]
-  },
   {
     path: '/login',
     name: '登陆',
