@@ -7,7 +7,7 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import store from '@/store'
 import EaLayout from 'ea-layout'
-import '@/router/getRouters.js'//这里进行路由后台获取的模拟
+// import '@/router/getRouters.js'//这里进行路由后台获取的模拟
 // Vue.prototype.$axios = axios;
 
 import axios from './assets/js/common.js' //引入axios
