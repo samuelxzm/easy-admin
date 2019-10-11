@@ -4,16 +4,16 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 export const constantRoutes = [
-  {
-    path: '/login',
-    name: '登陆',
-    component: () => import('@/views/Login')
-  },
-  {
-    path: '/dashboard',
-    name: '用户',
-    component: () => import('@/views/dashboard/index.vue')
-  }
+
+      {
+        path: '/module',
+        name: '表格',
+        component: () => import('@/views/module/index.vue'),
+        meta:{
+          serviceName:'ts-table'
+        }
+      }
+
 ]
 const createRouter = () => new Router({
   mode: 'history', // require service support

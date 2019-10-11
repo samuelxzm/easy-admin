@@ -6,7 +6,7 @@ import './icons' // icon
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import store from '@/store'
-
+import EaLayout from 'ea-layout'
 import '@/router/getRouters.js'//这里进行路由后台获取的模拟
 // Vue.prototype.$axios = axios;
 
@@ -16,6 +16,7 @@ import {getRequest,postRequest} from './assets/js/common.js'
 // import './assets/css/common.css'
 
 Vue.use(axios)
+Vue.use(EaLayout)
 Vue.prototype.getRequest = getRequest;
 Vue.prototype.postRequest = postRequest;
 Vue.prototype.$qs = qs;

@@ -1,25 +1,54 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-
+import Layout from 'easy-admin-x/src/components/Layout'
 Vue.use(Router)
 
 export const constantRoutes = [
+
   {
-    path: '/login',
-    name: '登陆',
-    component: () => import('@/views/Login')
-  },
-  {
-    path: '/table',
-    name: '首页lay',
-    component: () => import('@/components/Layout'),
+    path: '/dashboard',
+    component:Layout,
+    meta:{
+      type:'inner'
+    },
     children: [
       {
         path: 'index',
         name: '首页',
-        iconCls:'table',
-        meta:{serviceName:"ts-table"},
-        component: () => import('@/views/dashboard/index.vue')
+        component: () => import('@/views/dashboard/index.vue'),
+        meta:{
+          serviceName:'ts-table',
+          icon:'code'
+        }
+      }
+    ]
+  },
+  {
+    path: '/help',
+    name: '帮助',
+    component:Layout,
+    meta:{
+      serviceName:'ts-table',
+      icon:'code'
+    },
+    children: [
+      {
+        path: 'index',
+        name: '帮助',
+        component: () => import('@/views/dashboard/index.vue'),
+        meta:{
+          serviceName:'ts-table',
+          icon:'code'
+        }
+      },
+      {
+        path: 'about',
+        name: '关于',
+        component: () => import('@/views/dashboard/index.vue'),
+        meta:{
+          serviceName:'ts-table',
+          icon:'code'
+        }
       }
     ]
   }
@@ -31,5 +60,10 @@ const createRouter = () => new Router({
 })
 global.antRouter=constantRoutes
 const router = createRouter()
+// Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
+// export function resetRouter() {
+//   const newRouter = createRouter()
+//   router.matcher = newRouter.matcher // reset router
+// }
 
 export default router
