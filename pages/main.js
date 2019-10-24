@@ -36,7 +36,6 @@ function setLayer(obj) {
 }
 setLayer(Routerdata.routerList)
 let router = Ea.RouterSet(Routerdata)
-console.log(router)
 new Vue({
     router,
     store,

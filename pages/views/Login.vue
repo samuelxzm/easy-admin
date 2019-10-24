@@ -1,5 +1,3 @@
 <template>
-    <div id="app">
-login
-  </div>
+  <div id="app">login</div>
 </template>
