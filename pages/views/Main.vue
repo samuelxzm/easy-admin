@@ -17,6 +17,7 @@
         <!-- 全局搜索功能 -->
         <ea-search slot="options" />
         <!-- 刷新功能 -->
+        
         <ea-refresh slot="options" />
         <!-- 帮助功能 -->
         <ea-help slot="options" />
